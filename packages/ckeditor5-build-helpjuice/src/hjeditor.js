@@ -58,6 +58,7 @@ import Danger from './plugins/calloutblocks/danger/danger';
 import InternalBlock from './plugins/internalblock/internalblock';
 import DecisionTree from './plugins/decisiontree/decisiontree';
 import InsertArticle from './plugins/insertarticle/insertarticle';
+import InsertUpload from './plugins/insertupload/insertupload';
 
 export default class HelpjuiceEditor extends ClassicEditorBase { }
 
@@ -112,7 +113,8 @@ HelpjuiceEditor.builtinPlugins = [
 	InternalBlock,
 	DecisionTree,
 	SimpleUploadAdapter,
-	InsertArticle
+	InsertArticle,
+	InsertUpload
 ];
 
 // Editor configuration.
@@ -211,6 +213,7 @@ HelpjuiceEditor.defaultConfig = {
 			'redo',
 			'|',
 			'insertarticle',
+			'insertupload',
 			'accordion',
 			'tab',
 			'info',
