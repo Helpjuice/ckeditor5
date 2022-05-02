@@ -62,6 +62,7 @@ import DecisionTree from './plugins/decisiontree/decisiontree';
 import InsertArticle from './plugins/insertarticle/insertarticle';
 import FilesManager from './plugins/filesmanager/filesmanager';
 import Mention from './plugins/mention/src/mention';
+import QuestionThreads from './plugins/questionthreads/questionthreads';
 
 export default class HelpjuiceEditor extends ClassicEditorBase { }
 
@@ -121,7 +122,8 @@ HelpjuiceEditor.builtinPlugins = [
 	InsertArticle,
 	FilesManager,
 	Mention,
-	MentionCustomization
+	MentionCustomization,
+	QuestionThreads
 ];
 
 function MentionCustomization(editor) {
@@ -370,7 +372,8 @@ HelpjuiceEditor.defaultConfig = {
 			'warning',
 			'danger',
 			'internalblock',
-			'decisiontree'
+			'decisiontree',
+			'createNewQuestionThread'
 		],
 		shouldNotGroupWhenFull: true
 	},
