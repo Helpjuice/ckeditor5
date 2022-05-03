@@ -1,5 +1,6 @@
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+import CommentIcon from './icons/comment.svg';
 
 export default class QuestionThreadsUI extends Plugin {
     init() {
@@ -11,9 +12,9 @@ export default class QuestionThreadsUI extends Plugin {
             const buttonView = new ButtonView(locale)
 
             buttonView.set({
-                label: t('Start a new question thread'),
+                label: t('Create Comment'),
+				icon: CommentIcon,
                 tooltip: true,
-                withText: true
             })
 
 			buttonView.bind('isOn', 'isEnabled').to(command, 'value', 'isEnabled');

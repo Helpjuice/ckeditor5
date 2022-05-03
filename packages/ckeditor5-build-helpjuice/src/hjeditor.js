@@ -49,6 +49,7 @@ import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
 import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
 import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
+import BalloonToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/balloon/balloontoolbar';
 
 // Custom Plugins
 import Accordion from './plugins/accordion/accordion';
@@ -123,7 +124,8 @@ HelpjuiceEditor.builtinPlugins = [
 	FilesManager,
 	Mention,
 	MentionCustomization,
-	QuestionThreads
+	QuestionThreads,
+	BalloonToolbar
 ];
 
 function MentionCustomization(editor) {
@@ -372,9 +374,23 @@ HelpjuiceEditor.defaultConfig = {
 			'warning',
 			'danger',
 			'internalblock',
-			'decisiontree',
-			'createNewQuestionThread'
+			'decisiontree'
 		],
 		shouldNotGroupWhenFull: true
 	},
+	balloonToolbar: [ 
+		'createNewQuestionThread'
+	],
+	image: {
+		toolbar: [
+			'imageStyle:inline',
+			'imageStyle:block',
+			'imageStyle:side',
+			'|',
+			'toggleImageCaption',
+			'imageTextAlternative'
+		]
+	},
+	// This value must be kept in sync with the language defined in webpack.config.js.
+	language: 'en'
 };
