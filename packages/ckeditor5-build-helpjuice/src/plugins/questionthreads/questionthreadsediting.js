@@ -4,6 +4,7 @@ import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 import InsertQuestionThreadBodyCommand from './insertquestionthreadbodycommand';
 import ActivateQuestionThreadBodyCommand from './activatequestionthreadbodycommand';
 import RemoveQuestionThreadBodyCommand from './removequestionthreadbodycommand';
+import DeactivateAllQuestionThreadBodiesCommand from './deactivateallquestionthreadbodiescommand';
 
 export default class QuestionThreadsEditing extends Plugin {
     static get requires() {
@@ -17,6 +18,7 @@ export default class QuestionThreadsEditing extends Plugin {
         this.editor.commands.add('insertQuestionThreadBody', new InsertQuestionThreadBodyCommand(this.editor))
         this.editor.commands.add('activateQuestionThreadBody', new ActivateQuestionThreadBodyCommand(this.editor))
         this.editor.commands.add('removeQuestionThreadBody', new RemoveQuestionThreadBodyCommand(this.editor))
+        this.editor.commands.add('deactivateAllQuestionThreadBodies', new DeactivateAllQuestionThreadBodiesCommand(this.editor))
     }
 
     _defineSchema() {
