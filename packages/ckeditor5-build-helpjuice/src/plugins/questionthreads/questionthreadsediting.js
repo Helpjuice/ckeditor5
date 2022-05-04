@@ -2,6 +2,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { toWidget, toWidgetEditable } from '@ckeditor/ckeditor5-widget/src/utils';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 import InsertQuestionThreadBodyCommand from './insertquestionthreadbodycommand';
+import ActivateQuestionThreadBodyCommand from './activatequestionthreadbodycommand';
 
 export default class QuestionThreadsEditing extends Plugin {
     static get requires() {
@@ -13,6 +14,7 @@ export default class QuestionThreadsEditing extends Plugin {
         this._defineConverters();
 
         this.editor.commands.add('insertQuestionThreadBody', new InsertQuestionThreadBodyCommand(this.editor))
+        this.editor.commands.add('activateQuestionThreadBody', new ActivateQuestionThreadBodyCommand(this.editor))
     }
 
     _defineSchema() {
@@ -23,7 +25,7 @@ export default class QuestionThreadsEditing extends Plugin {
             isInline: true,
             isObject: true,
             allowAttributesOf: '$text',
-            allowAttributes: ['questionThreadId'],
+            allowAttributes: ['questionThreadId', 'active'],
         })
     }
 
@@ -33,12 +35,13 @@ export default class QuestionThreadsEditing extends Plugin {
         conversion.for('upcast').elementToElement({
             view: {
                 name: 'i',
-                classes: ['helpjuice-thread'],
+                classes: ['helpjuice-thread', 'active'],
                 attributes: ['data-id']
             },
             model: (viewElement, { writer: modelWriter }) => {
                 const model = modelWriter.createElement('questionThreadBody', {
-                    questionThreadId: viewElement.getAttribute('data-id')
+                    questionThreadId: viewElement.getAttribute('data-id'),
+                    active: viewElement.hasClass('active')
                 })
 
                 return model
@@ -46,7 +49,10 @@ export default class QuestionThreadsEditing extends Plugin {
         })
 
         conversion.for('editingDowncast').elementToElement({
-            model: 'questionThreadBody',
+            model: {
+                name: 'questionThreadBody',
+                attributes: ['questionThreadId', 'active'],
+            },
             view: (modelItem, { writer: viewWriter }) => {
                 const widgetElement = createQuestionThreadBodyView(modelItem, viewWriter)
 
@@ -55,7 +61,10 @@ export default class QuestionThreadsEditing extends Plugin {
         })
 
         conversion.for('dataDowncast').elementToElement({
-            model: 'questionThreadBody',
+            model: {
+                name: 'questionThreadBody',
+                attributes: ['questionThreadId', 'active'],
+            },
             view: (modelItem, { writer: viewWriter }) => createQuestionThreadBodyView(modelItem, viewWriter)
         })
     }
@@ -63,9 +72,15 @@ export default class QuestionThreadsEditing extends Plugin {
 
 function createQuestionThreadBodyView(modelItem, viewWriter) {
     const id = modelItem.getAttribute('questionThreadId')
+    const active = modelItem.getAttribute('active')
+
+    let classes = 'helpjuice-thread'
+    if (active) {
+        classes += ' active'
+    }
 
     const questionThreadBodyView = viewWriter.createEditableElement('i', {
-        class: 'helpjuice-thread',
+        class: classes,
         'data-id': id
     })
 

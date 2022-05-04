@@ -1,14 +1,15 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 
 export default class InsertQuestionThreadBodyCommand extends Command {
-    execute() {
+    execute({ value }) {
         const editor = this.editor
         const selection = editor.model.document.selection
 
         editor.model.change(writer => {
             const questionThreadBody = writer.createElement('questionThreadBody', {
                 ...Object.fromEntries(selection.getAttributes()),
-                questionThreadId: generateThreadIndex()
+                questionThreadId: value,
+                active: false
             })
 
             writer.append(editor.model.getSelectedContent(selection), questionThreadBody)
@@ -26,8 +27,4 @@ export default class InsertQuestionThreadBodyCommand extends Command {
 
         this.isEnabled = !selection.isCollapsed && isAllowed
     }
-}
-
-function generateThreadIndex() {
-    return Date.now().toString().substring(3) + '-' + Math.random().toString(36).substring(2,7)
 }
