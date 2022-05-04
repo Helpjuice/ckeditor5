@@ -4,7 +4,7 @@ export default class ActivateQuestionThreadBodyCommand extends Command {
     execute({ value }) {
         const editor = this.editor
 
-        editor.model.change(writer => {
+        editor.model.enqueueChange({ isUndoable: false }, writer => {
             const questionThreadBodies = this._findNodes(writer, 'questionThreadBody', editor.model.document.getRoot());
 
             questionThreadBodies.forEach(e => {

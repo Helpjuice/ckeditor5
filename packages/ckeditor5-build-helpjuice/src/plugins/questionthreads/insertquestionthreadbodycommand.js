@@ -5,7 +5,7 @@ export default class InsertQuestionThreadBodyCommand extends Command {
         const editor = this.editor
         const selection = editor.model.document.selection
 
-        editor.model.change(writer => {
+        editor.model.enqueueChange({ isUndoable: false }, writer => {
             const questionThreadBody = writer.createElement('questionThreadBody', {
                 ...Object.fromEntries(selection.getAttributes()),
                 questionThreadId: value,
