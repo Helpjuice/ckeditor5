@@ -37,14 +37,17 @@ export default class QuestionThreadsEditing extends Plugin {
         conversion.for('upcast').elementToElement({
             view: {
                 name: 'i',
-                classes: ['helpjuice-thread', 'active'],
+                classes: ['helpjuice-thread'],
                 attributes: ['data-id']
             },
             model: (viewElement, { writer: modelWriter }) => {
+                const content = viewElement.getChild(0).data
                 const model = modelWriter.createElement('questionThreadBody', {
                     questionThreadId: viewElement.getAttribute('data-id'),
                     active: viewElement.hasClass('active')
                 })
+
+                modelWriter.appendText(content, model)
 
                 return model
             }
