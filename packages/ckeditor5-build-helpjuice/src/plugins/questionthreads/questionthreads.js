@@ -7,4 +7,38 @@ export default class QuestionThreads extends Plugin {
 	static get requires() {
 		return [QuestionThreadsEditing, QuestionThreadsUI];
 	}
+
+	static get pluginName() {
+		return 'QuestionThreads';
+	}
+
+	getQuestionThreadPosition(questionThreadId) {
+		const thread = this._findNodes('questionThreadBody').find(e => e.getAttribute('questionThreadId') === questionThreadId)
+		if (!thread) return;
+
+		const viewElement = this.editor.editing.mapper.toViewElement(thread)
+		const domTarget = this.editor.editing.view.domConverter.mapViewToDom(viewElement)
+
+		return domTarget.getBoundingClientRect()
+	}
+
+
+	getQuestionThreadIds() {
+		return this._findNodes('questionThreadBody').map(e => e.getAttribute('questionThreadId'))
+	}
+
+    _findNodes(type) {
+        const nodes = [];
+		const range = this.editor.model.createRangeIn(this.editor.model.document.getRoot())
+
+        for (const value of range.getWalker({ ignoreElementEnd: true })) {
+            const node = value.item;
+
+            if (node.name == type) {
+                nodes.push(node);
+            }
+        }
+
+        return nodes;
+    }
 }
