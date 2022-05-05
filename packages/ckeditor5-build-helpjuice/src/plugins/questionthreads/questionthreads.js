@@ -22,7 +22,6 @@ export default class QuestionThreads extends Plugin {
 		return domTarget.getBoundingClientRect()
 	}
 
-
 	getQuestionThreadIds() {
 		return this._findNodes('questionThreadBody').map(e => e.getAttribute('questionThreadId'))
 	}

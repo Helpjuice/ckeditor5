@@ -4,19 +4,26 @@ export default class ActivateQuestionThreadBodyCommand extends Command {
     execute({ value }) {
         const editor = this.editor
 
-        editor.model.enqueueChange({ isUndoable: false }, writer => {
-            const questionThreadBodies = this._findNodes(writer, 'questionThreadBody', editor.model.document.getRoot());
+        editor.editing.view.change(writer => {
+            const questionThreadBodies = this._findNodes(editor.model, 'questionThreadBody', editor.model.document.getRoot());
 
-            questionThreadBodies.forEach(e => {
-                const questionThreadId = e.getAttribute('questionThreadId')
-                writer.setAttribute('active', questionThreadId === value, e)
+            questionThreadBodies.forEach(el => {
+                const questionThreadId = el.getAttribute('questionThreadId')
+                const viewElement = editor.editing.mapper.toViewElement(el)
+                if (!viewElement) return;
+
+                if (questionThreadId === value) {
+                    writer.addClass('active', viewElement)
+                } else {
+                    writer.removeClass('active', viewElement)
+                }
             })
         })
     }
 
-    _findNodes(writer, type, root) {
+    _findNodes(model, type, root) {
         const nodes = [];
-        const range = writer.createRangeIn(root);
+        const range = model.createRangeIn(root);
 
         for (const value of range.getWalker({ ignoreElementEnd: true })) {
             const node = value.item;

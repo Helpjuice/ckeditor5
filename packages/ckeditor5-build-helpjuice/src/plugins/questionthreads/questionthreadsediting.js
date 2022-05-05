@@ -29,7 +29,7 @@ export default class QuestionThreadsEditing extends Plugin {
             isInline: true,
             isObject: true,
             allowAttributesOf: '$text',
-            allowAttributes: ['questionThreadId', 'active'],
+            allowAttributes: ['questionThreadId'],
         })
     }
 
@@ -45,8 +45,7 @@ export default class QuestionThreadsEditing extends Plugin {
             model: (viewElement, { writer: modelWriter }) => {
                 const content = viewElement.getChild(0).data
                 const model = modelWriter.createElement('questionThreadBody', {
-                    questionThreadId: viewElement.getAttribute('data-id'),
-                    active: viewElement.hasClass('active')
+                    questionThreadId: viewElement.getAttribute('data-id')
                 })
 
                 modelWriter.appendText(content, model)
@@ -58,7 +57,7 @@ export default class QuestionThreadsEditing extends Plugin {
         conversion.for('editingDowncast').elementToElement({
             model: {
                 name: 'questionThreadBody',
-                attributes: ['questionThreadId', 'active'],
+                attributes: ['questionThreadId'],
             },
             view: (modelItem, { writer: viewWriter }) => {
                 const widgetElement = createQuestionThreadBodyView(modelItem, viewWriter)
@@ -70,7 +69,7 @@ export default class QuestionThreadsEditing extends Plugin {
         conversion.for('dataDowncast').elementToElement({
             model: {
                 name: 'questionThreadBody',
-                attributes: ['questionThreadId', 'active'],
+                attributes: ['questionThreadId'],
             },
             view: (modelItem, { writer: viewWriter }) => createQuestionThreadBodyView(modelItem, viewWriter)
         })
@@ -79,15 +78,9 @@ export default class QuestionThreadsEditing extends Plugin {
 
 function createQuestionThreadBodyView(modelItem, viewWriter) {
     const id = modelItem.getAttribute('questionThreadId')
-    const active = modelItem.getAttribute('active')
-
-    let classes = 'helpjuice-thread'
-    if (active) {
-        classes += ' active'
-    }
 
     const questionThreadBodyView = viewWriter.createEditableElement('i', {
-        class: classes,
+        class: 'helpjuice-thread',
         'data-id': id
     })
 
