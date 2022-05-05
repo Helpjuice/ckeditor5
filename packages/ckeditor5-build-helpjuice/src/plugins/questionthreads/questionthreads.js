@@ -26,6 +26,16 @@ export default class QuestionThreads extends Plugin {
 		return this._findNodes('questionThreadBody').map(e => e.getAttribute('questionThreadId'))
 	}
 
+	isInsideQuestionThread(el, questionThreadId) {
+		const thread = this._findNodes('questionThreadBody').find(e => e.getAttribute('questionThreadId') === questionThreadId)
+		if (!thread) return false;
+
+		const viewElement = this.editor.editing.mapper.toViewElement(thread)
+		const domTarget = this.editor.editing.view.domConverter.mapViewToDom(viewElement)
+
+		return domTarget.contains(el)
+	}
+
     _findNodes(type) {
         const nodes = [];
 		const range = this.editor.model.createRangeIn(this.editor.model.document.getRoot())
