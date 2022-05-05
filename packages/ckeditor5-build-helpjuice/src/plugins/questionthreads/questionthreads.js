@@ -12,12 +12,17 @@ export default class QuestionThreads extends Plugin {
 		return 'QuestionThreads';
 	}
 
-	getQuestionThreadPosition(questionThreadId) {
+	getQuestionThreadElement(questionThreadId) {
 		const thread = this._findNodes('questionThreadBody').find(e => e.getAttribute('questionThreadId') === questionThreadId)
 		if (!thread) return;
 
 		const viewElement = this.editor.editing.mapper.toViewElement(thread)
-		const domTarget = this.editor.editing.view.domConverter.mapViewToDom(viewElement)
+		return this.editor.editing.view.domConverter.mapViewToDom(viewElement)
+	}
+
+	getQuestionThreadPosition(questionThreadId) {
+		const domTarget = this.getQuestionThreadElement(questionThreadId)
+		if (!domTarget) return null;
 
 		return domTarget.getBoundingClientRect()
 	}
