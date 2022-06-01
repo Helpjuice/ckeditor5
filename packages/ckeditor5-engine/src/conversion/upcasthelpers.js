@@ -465,6 +465,11 @@ export function convertText() {
 				return;
 			}
 
+			// Do not auto-paragraph whitespaces.
+			if ( data.viewItem.data.trim().length == 0 ) {
+				return;
+			}
+
 			position = wrapInParagraph( position, writer );
 		}
 
@@ -867,6 +872,13 @@ function prepareToAttributeConverter( config, shallow ) {
 	const matcher = new Matcher( config.view );
 
 	return ( evt, data, conversionApi ) => {
+		// Converting an attribute of an element that has not been converted to anything does not make sense
+		// because there will be nowhere to set that attribute on. At this stage, the element should've already
+		// been converted (https://github.com/ckeditor/ckeditor5/issues/11000).
+		if ( !data.modelRange && shallow ) {
+			return;
+		}
+
 		const match = matcher.match( data.viewItem );
 
 		// If there is no match, this callback should not do anything.
