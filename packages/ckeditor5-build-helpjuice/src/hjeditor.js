@@ -402,6 +402,10 @@ HelpjuiceEditor.defaultConfig = {
 					align: true
 				}
 			},
+			{
+				name: 'a',
+				classes: true
+			}
 		],
 		disallow: [ /* HTML features to disallow */ ]
 	},
