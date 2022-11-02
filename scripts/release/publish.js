@@ -47,7 +47,30 @@ require( '@ckeditor/ckeditor5-dev-env' )
 				'src/*.js',
 				'build/ckeditor5-dll.js',
 				'build/ckeditor5-dll.manifest.json',
-				'build/translations/*.js'
+				'build/translations/*.js',
+				'tsconfig.json',
+				'typings/*.d.ts'
+			]
+		},
+		optionalFilesAndDirectories: {
+			// The `#default` key is used for all packages that do not have own definition.
+			default: [
+				// Some of CKEditor 5 features do not contain the UI layer. Hence, it is not required to publish the directory.
+				'lang',
+				// Some of CKEditor 5 features do not define styles or icons.
+				'theme',
+				// The CKEditor 5 framework does not define features.
+				'ckeditor5-metadata.json'
+			],
+
+			// Package-specific definition of optional files and directories.
+			'@ckeditor/ckeditor5-theme-lark': [
+				// Like in defaults, this package does not contain the UI layer. Hence, it is not required to publish the directory.
+				'lang',
+				// This package does not contain any source code, but only styles in the `theme` directory. Hence, `theme` is not optional.
+				'src',
+				// Like in defaults, this package does not define features.
+				'ckeditor5-metadata.json'
 			]
 		},
 		dryRun: process.argv.includes( '--dry-run' )

@@ -8,7 +8,7 @@
 import VirtualTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/virtualtesteditor';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import DataTransfer from '@ckeditor/ckeditor5-clipboard/src/datatransfer';
+import DataTransfer from '@ckeditor/ckeditor5-engine/src/view/datatransfer';
 import Clipboard from '@ckeditor/ckeditor5-clipboard/src/clipboard';
 import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
 import ListEditing from '@ckeditor/ckeditor5-list/src/list/listediting';
@@ -136,7 +136,7 @@ describe( 'ImageInlineEditing', () => {
 			it( 'should convert', () => {
 				setModelData( model, '<paragraph><imageInline src="/assets/sample.png" alt="alt text"></imageInline></paragraph>' );
 
-				expect( editor.getData() ).to.equal( '<p><img alt="alt text" src="/assets/sample.png"></p>' );
+				expect( editor.getData() ).to.equal( '<p><img src="/assets/sample.png" alt="alt text"></p>' );
 			} );
 
 			it( 'should convert without alt attribute', () => {
@@ -194,7 +194,7 @@ describe( 'ImageInlineEditing', () => {
 					'</imageInline></paragraph>'
 				);
 
-				expect( editor.getData() ).to.equal( '<p><img alt="alt text" src="/assets/sample.png"></p>' );
+				expect( editor.getData() ).to.equal( '<p><img src="/assets/sample.png" alt="alt text"></p>' );
 			} );
 
 			it( 'should not convert srcset attribute if has wrong data', () => {
@@ -210,7 +210,7 @@ describe( 'ImageInlineEditing', () => {
 					writer.removeAttribute( 'srcset', imageInline );
 				} );
 
-				expect( editor.getData() ).to.equal( '<p><img alt="alt text" src="/assets/sample.png"></p>' );
+				expect( editor.getData() ).to.equal( '<p><img src="/assets/sample.png" alt="alt text"></p>' );
 			} );
 		} );
 

@@ -30,10 +30,12 @@ import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting'
 import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
 import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
 import TableCaption from '@ckeditor/ckeditor5-table/src/tablecaption';
+import TableColumnResize from '@ckeditor/ckeditor5-table/src/tablecolumnresize';
 import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
+import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 
 import GeneralHtmlSupport from '../../src/generalhtmlsupport';
 
@@ -43,10 +45,11 @@ ClassicEditor
 			ArticlePluginSet, Underline, Strikethrough, Superscript, Subscript, Code,
 			FontColor, FontBackgroundColor, FontFamily, FontSize, Highlight,
 			CodeBlock, TodoList, ListProperties, TableProperties, TableCellProperties, TableCaption,
-			EasyImage, ImageResize, LinkImage, HtmlEmbed,
+			TableColumnResize, EasyImage, ImageResize, LinkImage, HtmlEmbed,
 			Alignment, IndentBlock,
 			PageBreak, HorizontalLine,
 			ImageUpload, CloudServices,
+			RemoveFormat,
 			SourceEditing,
 			GeneralHtmlSupport
 		],
@@ -69,7 +72,9 @@ ClassicEditor
 			'|',
 			'pageBreak', 'horizontalLine',
 			'|',
-			'undo', 'redo'
+			'undo', 'redo',
+			'|',
+			'RemoveFormat'
 		],
 		htmlSupport: {
 			allow: [

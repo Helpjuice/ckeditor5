@@ -1159,7 +1159,7 @@ describe( 'MediaEmbedElementSupport', () => {
 			} );
 
 			expect( editor.getData() ).to.equal(
-				'<p><oembed data-foo="foo" url="https://www.youtube.com/watch?v=ZVv7UMQPEWk"></oembed></p>'
+				'<p><oembed url="https://www.youtube.com/watch?v=ZVv7UMQPEWk" data-foo="foo"></oembed></p>'
 			);
 		} );
 
@@ -1265,6 +1265,9 @@ describe( 'MediaEmbedElementSupport', () => {
 				classes: true
 			} ] );
 
+			// Apply filtering rules added after initial data load.
+			editor.setData( '' );
+
 			editor.conversion.for( 'upcast' ).dataToMarker( {
 				view: 'commented',
 				converterPriority: 100000 // For marker this priority equals to -999
@@ -1278,7 +1281,7 @@ describe( 'MediaEmbedElementSupport', () => {
 
 			expect( editor.getData() ).to.equal(
 				'<figure class="media" data-foo="foo">' +
-					'<p><oembed data-foo="foo" url="https://www.youtube.com/watch?v=ZVv7UMQPEWk"></oembed></p>' +
+					'<p><oembed url="https://www.youtube.com/watch?v=ZVv7UMQPEWk" data-foo="foo"></oembed></p>' +
 				'</figure>'
 			);
 

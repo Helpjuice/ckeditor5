@@ -8,7 +8,7 @@
 import VirtualTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/virtualtesteditor';
 import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import DataTransfer from '@ckeditor/ckeditor5-clipboard/src/datatransfer';
+import DataTransfer from '@ckeditor/ckeditor5-engine/src/view/datatransfer';
 import Clipboard from '@ckeditor/ckeditor5-clipboard/src/clipboard';
 
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
@@ -129,7 +129,7 @@ describe( 'ImageBlockEditing', () => {
 			it( 'should convert', () => {
 				setModelData( model, '<imageBlock src="/assets/sample.png" alt="alt text"></imageBlock>' );
 
-				expect( editor.getData() ).to.equal( '<figure class="image"><img alt="alt text" src="/assets/sample.png"></figure>' );
+				expect( editor.getData() ).to.equal( '<figure class="image"><img src="/assets/sample.png" alt="alt text"></figure>' );
 			} );
 
 			it( 'should convert without alt attribute', () => {
@@ -190,7 +190,7 @@ describe( 'ImageBlockEditing', () => {
 
 				expect( editor.getData() ).to.equal(
 					'<figure class="image">' +
-						'<img alt="alt text" src="/assets/sample.png">' +
+						'<img src="/assets/sample.png" alt="alt text">' +
 					'</figure>'
 				);
 			} );
@@ -210,7 +210,7 @@ describe( 'ImageBlockEditing', () => {
 
 				expect( editor.getData() ).to.equal(
 					'<figure class="image">' +
-						'<img alt="alt text" src="/assets/sample.png">' +
+						'<img src="/assets/sample.png" alt="alt text">' +
 					'</figure>'
 				);
 			} );
