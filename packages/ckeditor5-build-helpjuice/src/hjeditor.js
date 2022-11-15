@@ -48,7 +48,6 @@ import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
-import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
 import Style from '@ckeditor/ckeditor5-style/src/style';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
@@ -130,7 +129,6 @@ HelpjuiceEditor.builtinPlugins = [
 	CalloutBlocks,
 	InternalBlock,
 	DecisionTree,
-	SimpleUploadAdapter,
 	InsertArticle,
 	FilesManager,
 	Mention,
@@ -254,10 +252,6 @@ HelpjuiceEditor.defaultConfig = {
 		colors: colorPalette,
 		columns: 7
 	},
-	simpleUpload: {
-		// The URL that the images are uploaded to.
-		uploadUrl: '/uploads'
-	},
 	table: {
 		contentToolbar: [
 			'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'
@@ -327,7 +321,7 @@ HelpjuiceEditor.defaultConfig = {
 			'imageTextAlternative',
 		],
 		upload: {
-			types: [ 'jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff', 'svg+xml' ]
+			types: [ 'jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff', 'svg+xml', 'x-icon' ]
 		}
 	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
