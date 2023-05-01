@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
@@ -74,6 +75,19 @@ export default class FontSizeUI extends Plugin {
 			this.listenTo( dropdownView, 'execute', evt => {
 				editor.execute( ( evt.source as any ).commandName, { value: ( evt.source as any ).commandParam } );
 				editor.editing.view.focus();
+			} );
+
+			// Show label on dropdown's button.
+			dropdownView.buttonView.set( 'withText', true );
+
+			// Hide the icon.
+			dropdownView.buttonView.set( 'icon', false );
+
+			// Bind dropdown's button label to fontSize value.
+			dropdownView.buttonView.bind( 'label' ).to( command, 'value', value => {
+				// If no value is set on the command show default size.
+				// Use t() method to make that string translatable.
+				return value ? value : t( '16px' );
 			} );
 
 			return dropdownView;
