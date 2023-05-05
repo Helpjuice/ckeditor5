@@ -6,7 +6,7 @@
 /**
  * @module font/fontfamily/fontfamilyui
  */
-
+// @ts-ignore
 import { Plugin } from 'ckeditor5/src/core';
 import { Collection } from 'ckeditor5/src/utils';
 import { Model, createDropdown, addListToDropdown, type ListDropdownItemDefinition } from 'ckeditor5/src/ui';
@@ -65,6 +65,20 @@ export default class FontFamilyUI extends Plugin {
 			this.listenTo( dropdownView, 'execute', evt => {
 				editor.execute( ( evt.source as any ).commandName, { value: ( evt.source as any ).commandParam } );
 				editor.editing.view.focus();
+			} );
+
+			// Show label on dropdown's button.
+			dropdownView.buttonView.set( 'withText', true );
+
+			// Hide the icon.
+			// @ts-ignore
+			dropdownView.buttonView.set( 'icon', false );
+
+			// Bind dropdown's button label to fontFamily value.
+			dropdownView.buttonView.bind( 'label' ).to( command, 'value', value => {
+				// If no value is set on the command show 'Default' text.
+				// Use t() method to make that string translatable.
+				return value ? value : t( 'Default' );
 			} );
 
 			return dropdownView;

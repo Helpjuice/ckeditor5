@@ -6,7 +6,6 @@
 /**
  * @module font/fontsize/fontsizeui
  */
-
 import { Plugin } from 'ckeditor5/src/core';
 import {
 	Model,
