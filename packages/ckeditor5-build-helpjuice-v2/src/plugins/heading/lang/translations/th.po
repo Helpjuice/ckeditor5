@@ -1,4 +1,4 @@
-# Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+# Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
 #
 #                                     !!! IMPORTANT !!!
 #
@@ -34,28 +34,28 @@ msgstr "หัวข้อขนาด 1"
 
 msgctxt "Dropdown option label for the heading level 2 format."
 msgid "Heading 2"
-msgstr "หัวข้อ 2"
+msgstr ""
 
 msgctxt "Dropdown option label for the heading level 3 format."
 msgid "Heading 3"
-msgstr "หัวข้อ 3"
+msgstr ""
 
 msgctxt "Dropdown option label for the heading level 4 format."
 msgid "Heading 4"
-msgstr "หัวข้อ 4"
+msgstr ""
 
 msgctxt "Dropdown option label for the heading level 5 format."
 msgid "Heading 5"
-msgstr "หัวข้อ 5"
+msgstr ""
 
 msgctxt "Dropdown option label for the heading level 6 format."
 msgid "Heading 6"
-msgstr "หัวข้อ 6"
+msgstr ""
 
 msgctxt "A default value of the placeholder for the content title."
 msgid "Type your title"
-msgstr "พิมพ์ชื่อเรื่องของคุณ"
+msgstr ""
 
 msgctxt "A default value of the placeholder for the content body."
 msgid "Type or paste your content here."
-msgstr "พิมพ์หรือวางเนื้อหาของคุณที่นี่"
+msgstr ""
