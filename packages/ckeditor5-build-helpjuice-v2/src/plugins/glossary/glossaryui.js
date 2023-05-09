@@ -7,42 +7,42 @@ export default class GlossaryUI extends Plugin {
 		const editor = this.editor;
 		const t = editor.t;
 
-		editor.ui.componentFactory.add( 'glossary', locale => {
-			const buttonView = new ButtonView( locale );
+		editor.ui.componentFactory.add('glossary', locale => {
+			const buttonView = new ButtonView(locale);
 
-			buttonView.set( {
-				label: t( 'Insert Glossary' ),
+			buttonView.set({
+				label: t('Insert Glossary'),
 				icon: BookIcon,
 				tooltip: true,
 				class: 'insert-glossary-btn'
-			} );
+			});
 
 			// Execute the command when the button is clicked (executed).
-			this.listenTo( buttonView, 'execute', () => {
-				const glossaryModal = document.getElementById( 'new-glossary-term-modal' );
-				const glossaryTermExpression = glossaryModal.querySelector( '#glossary_term_expression' );
-				const glossaryTermDefinition = glossaryModal.querySelector( '#glossary_term_definition' );
+			this.listenTo(buttonView, 'execute', () => {
+				const glossaryModal = document.getElementById('new-glossary-term-modal');
+				const glossaryTermExpression = glossaryModal.querySelector('#glossary_term_expression');
+				const glossaryTermDefinition = glossaryModal.querySelector('#glossary_term_definition');
 
 				const range = editor.model.document.selection.getFirstRange();
 				let selection = '';
-				for ( const item of range.getItems() ) {
-					if ( item.data ) {
+				for (const item of range.getItems()) {
+					if (item.data) {
 						selection += item.data;
 					}
 				}
 
-				if ( selection.length ) {
+				if (selection.length) {
 					// WE USE `window.getSelection()` BECAUSE EDITOR SELECTION DOESN'T ACCEPT `getBoundingClientRect`
-					const range = window.getSelection().getRangeAt( 0 );
+					const range = window.getSelection().getRangeAt(0);
 					const position = range.getBoundingClientRect();
 					const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 					const selectionHeight = position.bottom - position.top;
-					const maxLeftPost = document.querySelector( '.editor-content-new .editor-body' ).getBoundingClientRect().right - ( glossaryModal.offsetWidth + 40 );
+					const maxLeftPost = document.querySelector('.editor-content-new .editor-body').getBoundingClientRect().right - (glossaryModal.offsetWidth + 40);
 
 					// Close any opened glossary modal
-					document.querySelectorAll( '.glossary-term-modal' ).forEach( modal => {
+					document.querySelectorAll('.glossary-term-modal').forEach(modal => {
 						modal.style.display = 'none';
-					} );
+					});
 
 					// SHOW MODAL ON CORRECT POSITION
 					glossaryModal.style.display = 'block';
@@ -52,21 +52,21 @@ export default class GlossaryUI extends Plugin {
 					glossaryTermExpression.value = selection.trim();
 					glossaryTermDefinition.value = '';
 				} else {
-					this.createMessage( 'comment-message error', 'You must select some text in order to create a glossary item' );
+					this.createMessage('comment-message error', 'You must select some text in order to create a glossary item');
 				}
-			} );
+			});
 
 			return buttonView;
-		} );
+		});
 	}
 
-	createMessage( classes, text ) {
-		const message = document.createElement( 'div' );
+	createMessage(classes, text) {
+		const message = document.createElement('div');
 		message.className = classes;
 		message.textContent = text;
-		document.getElementById( 'article-comments' ).append( message );
+		document.getElementById('article-comments').append(message);
 		message.style.display = 'block';
 
-		setTimeout( () => message.remove(), 3000 );
+		setTimeout(() => message.remove(), 3000);
 	}
 }
