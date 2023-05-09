@@ -39,6 +39,11 @@ export default class GlossaryUI extends Plugin {
 					const selectionHeight = position.bottom - position.top;
 					const maxLeftPost = document.querySelector( '.editor-content-new .editor-body' ).getBoundingClientRect().right - ( glossaryModal.offsetWidth + 40 );
 
+					// Close any opened glossary modal
+					document.querySelectorAll( '.glossary-term-modal' ).forEach( modal => {
+						modal.style.display = 'none';
+					} );
+
 					// SHOW MODAL ON CORRECT POSITION
 					glossaryModal.style.display = 'block';
 					glossaryModal.style.top = position.top + scrollTop + selectionHeight + 8 + 'px';
