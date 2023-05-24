@@ -107,28 +107,29 @@ export default class MediaEmbedEditing extends Plugin {
 				{
 					name: 'vimeo',
 					url: [
-						/^vimeo\.com\/album\/[^/]+\/video\/(\d+)(?:\/(\w+))?/,
-						/^vimeo\.com\/channels\/[^/]+\/(\d+)(?:\/(\w+))?/,
-						/^vimeo\.com\/groups\/[^/]+\/videos\/(\d+)(?:\/(\w+))?/,
-						/^vimeo\.com\/ondemand\/[^/]+\/(\d+)(?:\/(\w+))?/,
-    					/^player\.vimeo\.com\/video\/(\d+)(?:\?h=(\w+))?/,
-						/^vimeo\.com\/(\d+)\/(\w+)/
-					  ],
-
+					  /^vimeo\.com\/album\/[^/]+\/video\/(\d+)(?:\/(\w+))?/,
+					  /^vimeo\.com\/channels\/[^/]+\/(\d+)(?:\/(\w+))?/,
+					  /^vimeo\.com\/groups\/[^/]+\/videos\/(\d+)(?:\/(\w+))?/,
+					  /^vimeo\.com\/ondemand\/[^/]+\/(\d+)(?:\/(\w+))?/,
+					  /^player\.vimeo\.com\/video\/(\d+)(?:\?h=(\w+))?$/,
+					  /^player\.vimeo\.com\/video\/(\d+)/,
+					  /^vimeo\.com\/(\d+)\/(\w+)/,
+					  /^vimeo\.com\/(\d+)$/
+					],
 					html: match => {
-						const id = match[1];
-						const additionalId = match[ 2 ] || '';
+					  const id = match[1];
+					  const additionalId = match[2] || '';
 
-						return (
-							'<div style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 56.2493%;">' +
-							`<iframe src="https://player.vimeo.com/video/${id}/${additionalId}" ` +
-							'style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" ' +
-							'frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>' +
-							'</iframe>' +
-							'</div>'
-						);
+					  return (
+						'<div style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 56.2493%;">' +
+						`<iframe src="https://player.vimeo.com/video/${id}${additionalId ? '/' + additionalId : ''}" ` +
+						'style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" ' +
+						'frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>' +
+						'</iframe>' +
+						'</div>'
+					  );
 					}
-				},
+				  },
 
 				{
 					name: 'instagram',
