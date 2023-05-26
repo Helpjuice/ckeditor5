@@ -122,7 +122,7 @@ export default class MediaEmbedEditing extends Plugin {
 
 					  return (
 						'<div style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 56.2493%;">' +
-						`<iframe src="https://player.vimeo.com/video/${id}${additionalId ? '/' + additionalId : ''}" ` +
+						`<iframe src="https://player.vimeo.com/video/${id}${additionalId ? '?h=' + additionalId : ''}" ` +
 						'style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" ' +
 						'frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>' +
 						'</iframe>' +
