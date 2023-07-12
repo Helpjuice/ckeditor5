@@ -1,4 +1,4 @@
-# Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+# Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
 #
 #                                     !!! IMPORTANT !!!
 #
@@ -12,7 +12,7 @@
 #
 msgid ""
 msgstr ""
-"Language-Team: Serbian (Latin) (https://www.transifex.com/ckeditor/teams/11143/sr@latin/)\n"
+"Language-Team: Serbian (Latin) (https://app.transifex.com/ckeditor/teams/11143/sr@latin/)\n"
 "Language: sr@latin\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -111,3 +111,11 @@ msgstr "Ubaci sliku preko URL-a"
 msgctxt "The input label for the Insert image via URL form for a pre-existing image."
 msgid "Update image URL"
 msgstr "Ažuriraj URL slike"
+
+msgctxt "Text used by screen readers do describe an image when the image has no text alternative."
+msgid "Caption for the image"
+msgstr "Natpis za sliku"
+
+msgctxt "Text used by screen readers do describe an image when there is a text alternative available, e.g. 'Caption for image: this is a description of the image.'"
+msgid "Caption for image: %0"
+msgstr "Natpis za sliku:%0"
