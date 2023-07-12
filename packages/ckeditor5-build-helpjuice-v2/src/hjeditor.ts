@@ -23,7 +23,7 @@ import { FindAndReplace } from '@ckeditor/ckeditor5-find-and-replace';
 import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
 import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
-import { Table, TableCaption, TableToolbar, TableProperties, TableCellProperties, TableColumnResize }  from '@ckeditor/ckeditor5-table';
+import { Table, TableCaption, TableToolbar, TableProperties, TableCellProperties, TableColumnResize } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
 import { Highlight } from '@ckeditor/ckeditor5-highlight';
@@ -32,13 +32,8 @@ import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
 import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import { Style } from '@ckeditor/ckeditor5-style';
 
-// Image Plugins
-import Image from './plugins/image/src/image';
-import ImageCaption from './plugins/image/src/imagecaption';
-import ImageStyle from './plugins/image/src/imagestyle';
-import ImageResize from './plugins/image/src/imageresize';
-import ImageToolbar from './plugins/image/src/imagetoolbar';
-import ImageUpload from './plugins/image/src/imageupload';
+// Image Plugin
+import { Image, ImageCaption, ImageStyle, ImageResize, ImageToolbar, ImageUpload } from './plugins/image';
 
 // Custom Plugins
 import Heading from './plugins/heading/src/heading';
