@@ -34,8 +34,7 @@ import { Style } from '@ckeditor/ckeditor5-style';
 
 // Image Plugin
 import { Image, ImageCaption, ImageStyle, ImageResize, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
-
-import MyImagePlugin from './plugins/image/customimage';
+import CustomImageAttributesPlugin from './plugins/image/customimageattributesplugin';
 
 // Custom Plugins
 import Heading from './plugins/heading/src/heading';
@@ -86,7 +85,7 @@ HelpjuiceEditor.builtinPlugins = [
 	ImageResize,
 	ImageToolbar,
 	ImageUpload,
-	MyImagePlugin,
+	CustomImageAttributesPlugin,
 	LinkImage,
 	Indent,
 	IndentBlock,
