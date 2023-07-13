@@ -472,6 +472,7 @@ HelpjuiceEditor.defaultConfig = {
 			'highlight',
 			'htmlembed',
 			'codeblock',
+			'inlineCode',
 			'|',
 			'filesmanager',
 			'link',
@@ -500,8 +501,7 @@ HelpjuiceEditor.defaultConfig = {
 			'undo',
 			'removeFormat',
 			'sourceEditing',
-			'findAndReplace',
-			'inlineCode'
+			'findAndReplace'
 		],
 		shouldNotGroupWhenFull: true
 	},
