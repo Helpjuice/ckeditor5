@@ -33,7 +33,9 @@ import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import { Style } from '@ckeditor/ckeditor5-style';
 
 // Image Plugin
-import { Image, ImageCaption, ImageStyle, ImageResize, ImageToolbar, ImageUpload } from './plugins/image';
+import { Image, ImageCaption, ImageStyle, ImageResize, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
+
+import MyImagePlugin from './plugins/image/customimage';
 
 // Custom Plugins
 import Heading from './plugins/heading/src/heading';
@@ -78,18 +80,13 @@ HelpjuiceEditor.builtinPlugins = [
 	HorizontalLine,
 	// @ts-ignore
 	Heading,
-	// @ts-ignore
 	Image,
-	// @ts-ignore
 	ImageCaption,
-	// @ts-ignore
 	ImageStyle,
-	// @ts-ignore
 	ImageResize,
-	// @ts-ignore
 	ImageToolbar,
-	// @ts-ignore
 	ImageUpload,
+	MyImagePlugin,
 	LinkImage,
 	Indent,
 	IndentBlock,
