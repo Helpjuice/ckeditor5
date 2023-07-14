@@ -25,7 +25,7 @@ export default class InlineCodeUI extends Plugin {
 
 			view.set( {
 				label: t( 'Insert Inline Code' ),
-				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 19h18v-2H3v2zM3 5v2h18V5H3zm5 7h8v-2H8v2z"/></svg>',
+				icon: '<svg fill="#333" width="24px" height="24px" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg" stroke="#333" stroke-width="0.00024000000000000003" transform="matrix(1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#fff" stroke-width="0.9120000000000001"></g><g id="SVGRepo_iconCarrier"><path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path><path d="M9.293 9.293 5.586 13l3.707 3.707 1.414-1.414L8.414 13l2.293-2.293zm5.414 0-1.414 1.414L15.586 13l-2.293 2.293 1.414 1.414L18.414 13z"></path></g></svg>',
 				tooltip: true,
 				isToggleable: true
 			} );
