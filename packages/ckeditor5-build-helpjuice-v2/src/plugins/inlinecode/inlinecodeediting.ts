@@ -4,9 +4,10 @@
  */
 
 import { Plugin } from 'ckeditor5/src/core';
-import InlineCodeCommand from './inlinecodecommand';
+import AttributeCommand from '@ckeditor/ckeditor5-basic-styles/src/attributecommand';
 
 const INLINECODE = 'inlineCode';
+const INLINECODE_COMMAND = 'inlineCodeCommand';
 
 export default class InlineCodeEditing extends Plugin {
 	public static get pluginName(): 'InlineCodeEditing' {
@@ -25,6 +26,8 @@ export default class InlineCodeEditing extends Plugin {
 			}
 		} );
 
-		editor.commands.add( INLINECODE, new InlineCodeCommand( editor, INLINECODE ) );
+		editor.commands.add( INLINECODE_COMMAND, new AttributeCommand( editor, INLINECODE ) );
+
+		editor.keystrokes.set( 'Ctrl+Alt+C', INLINECODE_COMMAND );
 	}
 }
