@@ -10,8 +10,9 @@
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 const { bundler, styles } = require( '@ckeditor/ckeditor5-dev-utils' );
-const { CKEditorTranslationsPlugin } = require('@ckeditor/ckeditor5-dev-translations');
+const { CKEditorTranslationsPlugin } = require( '@ckeditor/ckeditor5-dev-translations' );
 const TerserPlugin = require( 'terser-webpack-plugin' );
+const ForkTsCheckerWebpackPlugin = require( 'fork-ts-checker-webpack-plugin' );
 
 module.exports = {
 	devtool: 'source-map',
@@ -142,7 +143,15 @@ module.exports = {
 		new webpack.NormalModuleReplacementPlugin(
 			/source-editing\.svg/,
 			path.resolve( __dirname, 'src', 'icons', 'code.svg' )
-		)
+		),
+		new ForkTsCheckerWebpackPlugin({
+			typescript: {
+				diagnosticOptions: {
+					semantic: true,
+					syntactic: true
+				},
+			},
+		})
 	],
 
 	module: {
