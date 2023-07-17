@@ -64,7 +64,11 @@ export default class LinkCommand extends Command {
 		const selection = model.document.selection;
 		const selectedElement = selection.getSelectedElement() || first( selection.getSelectedBlocks() );
 
-		this.text = extractTextFromSelection( selection );
+		if ( selection.isCollapsed ) {
+			this.text = extractTextFromSelection( selection );
+		} else {
+			this.text = Array.from( selection.getFirstRange()!.getItems() ).map( ( item: any ) => item.data ).join( '' );
+		}
 
 		// A check for any integration that allows linking elements (e.g. `LinkImage`).
 		// Currently the selection reads attributes from text nodes only. See #7429 and #7465.
@@ -175,29 +179,8 @@ export default class LinkCommand extends Command {
 					delete extraAttributes.linkHref;
 				} else {
 					// get attributes that are shared by all children
-					const sharedAttributes: any = {};
+					const sharedAttributes: any = getSharedAttributes( children );
 
-					children.forEach( child => {
-						const attributes = Object.fromEntries( child._attrs );
-
-						for ( const attribute in attributes ) {
-							if ( attribute === 'linkHref' ) {
-								continue;
-							}
-
-							if ( sharedAttributes[ attribute ] === undefined ) {
-								sharedAttributes[ attribute ] = attributes[ attribute ];
-							} else if ( sharedAttributes[ attribute ] !== attributes[ attribute ] ) {
-								sharedAttributes[ attribute ] = null;
-							}
-						}
-
-						for ( const attribute in sharedAttributes ) {
-							if ( attributes[ attribute ] === undefined ) {
-								sharedAttributes[ attribute ] = null;
-							}
-						}
-					} );
 
 					for ( const attribute in sharedAttributes ) {
 						if ( sharedAttributes[ attribute ] !== null ) {
@@ -257,6 +240,7 @@ export default class LinkCommand extends Command {
 				// If selection has non-collapsed ranges, we change attribute on nodes inside those ranges
 				// omitting nodes where the `linkHref` attribute is disallowed.
 				const ranges = model.schema.getValidRanges( selection.getRanges(), 'linkHref' );
+				const originalText = Array.from( selection.getFirstRange()!.getItems() ).map( ( item: any ) => item.data ).join( '' );
 
 				// But for the first, check whether the `linkHref` attribute is allowed on selected blocks (e.g. the "image" element).
 				const allowedRanges = [];
@@ -284,10 +268,20 @@ export default class LinkCommand extends Command {
 					if ( rangesToUpdate.length === 1 ) {
 						// Current text of the link in the document.
 						const linkText = text || extractTextFromSelection( selection );
+						const attributes = Object.fromEntries( selection.getAttributes() );
 
-						if ( selection.getAttribute( 'linkHref' ) === linkText ) {
-							linkRange = this._updateLinkContent( model, writer, range, href, linkText, {} );
+						if ( text !== originalText ) {
+							linkRange = this._updateLinkContent( model, writer, range, href, linkText, attributes );
 							writer.setSelection( writer.createSelection( linkRange ) );
+						}
+					} else if ( selectionIsLink( selection ) ) {
+						const linkText = text || extractTextFromSelection( selection );
+						const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
+						const children = getLinkNodes( linkBlock, selection );
+						const attributes = getSharedAttributes( children );
+
+						if ( text !== originalText ) {
+							linkRange = this._updateLinkContent( model, writer, range, href, linkText, attributes );
 						}
 					}
 
@@ -395,6 +389,22 @@ function extractTextFromSelection( selection: DocumentSelection ): string | null
 	}
 }
 
+function selectionIsLink( selection: DocumentSelection ): boolean {
+	const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
+
+	if ( linkBlock.childCount > 1 ) {
+		const linkChildren = getLinkNodes( linkBlock, selection );
+
+		return linkChildren.length > 0;
+	} else {
+		const selectedElementIndex = selection.getFirstPosition()!.index;
+		const children = Array.from( linkBlock.getChildren() );
+
+		// @ts-ignore
+		return children[ selectedElementIndex ]._attrs.get( 'linkHref' ) !== undefined;
+	}
+}
+
 function getLinkNodes( linkBlock: any, selection: DocumentSelection ): Array<any> {
 	const selectedElementIndex = selection.getFirstPosition()!.index;
 	const children = Array.from( linkBlock.getChildren() );
@@ -418,4 +428,32 @@ function getLinkNodes( linkBlock: any, selection: DocumentSelection ): Array<any
 	}
 
 	return [ ...linkNodesBeforeSelectedElement, ...linkNodesAfterSelectedElement ];
+}
+
+function getSharedAttributes( children: Array<any> ): any {
+	const sharedAttributes: any = {};
+
+	children.forEach( child => {
+		const attributes = Object.fromEntries( child._attrs );
+
+		for ( const attribute in attributes ) {
+			if ( attribute === 'linkHref' ) {
+				continue;
+			}
+
+			if ( sharedAttributes[ attribute ] === undefined ) {
+				sharedAttributes[ attribute ] = attributes[ attribute ];
+			} else if ( sharedAttributes[ attribute ] !== attributes[ attribute ] ) {
+				sharedAttributes[ attribute ] = null;
+			}
+		}
+
+		for ( const attribute in sharedAttributes ) {
+			if ( attributes[ attribute ] === undefined ) {
+				sharedAttributes[ attribute ] = null;
+			}
+		}
+	} );
+
+	return sharedAttributes;
 }
