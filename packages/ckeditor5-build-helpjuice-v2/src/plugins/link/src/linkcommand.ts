@@ -165,8 +165,46 @@ export default class LinkCommand extends Command {
 			// If selection is collapsed then update selected link or insert new one at the place of caret.
 			if ( selection.isCollapsed ) {
 				const position = selection.getFirstPosition()!;
+				const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
+				const children = getLinkNodes( linkBlock, selection );
+				let extraAttributes: any = {};
 
-				console.log("if ( selection.isCollapsed )")
+				// maintain extra attributes
+				if ( linkBlock.childCount === 1 || ( linkBlock.childCount === 2 && children.length === 1 ) ) {
+					extraAttributes = Object.fromEntries( children[ 0 ]._attrs );
+					delete extraAttributes.linkHref;
+				} else {
+					// get attributes that are shared by all children
+					const sharedAttributes: any = {};
+
+					children.forEach( child => {
+						const attributes = Object.fromEntries( child._attrs );
+
+						for ( const attribute in attributes ) {
+							if ( attribute === 'linkHref' ) {
+								continue;
+							}
+
+							if ( sharedAttributes[ attribute ] === undefined ) {
+								sharedAttributes[ attribute ] = attributes[ attribute ];
+							} else if ( sharedAttributes[ attribute ] !== attributes[ attribute ] ) {
+								sharedAttributes[ attribute ] = null;
+							}
+						}
+
+						for ( const attribute in sharedAttributes ) {
+							if ( attributes[ attribute ] === undefined ) {
+								sharedAttributes[ attribute ] = null;
+							}
+						}
+					} );
+
+					for ( const attribute in sharedAttributes ) {
+						if ( sharedAttributes[ attribute ] !== null ) {
+							extraAttributes[ attribute ] = sharedAttributes[ attribute ];
+						}
+					}
+				}
 
 				// When selection is inside text with `linkHref` attribute.
 				if ( selection.hasAttribute( 'linkHref' ) ) {
@@ -174,14 +212,8 @@ export default class LinkCommand extends Command {
 					// Then update `linkHref` value.
 					let linkRange = findAttributeRange( position, 'linkHref', selection.getAttribute( 'linkHref' ), model );
 
-					console.log("if ( selection.hasAttribute( 'linkHref' ) )");
-
-					if ( selection.getAttribute( 'linkHref' ) === linkText ) {
-						linkRange = this._updateLinkContent( model, writer, linkRange, href, href );
-						console.log("if ( selection.getAttribute( 'linkHref' ) === linkText )");
-					} else {
-						linkRange = this._updateLinkContent( model, writer, linkRange, href, linkText );
-						console.log("else ( selection.getAttribute( 'linkHref' ) === linkText )");
+					if ( text !== extractTextFromSelection( selection ) ) {
+						linkRange = this._updateLinkContent( model, writer, linkRange, href, linkText, extraAttributes );
 					}
 
 					writer.setAttribute( 'linkHref', href, linkRange );
@@ -202,8 +234,6 @@ export default class LinkCommand extends Command {
 				// So, if `href` is empty, do not create text node.
 				else if ( href !== '' ) {
 					const attributes = toMap( selection.getAttributes() );
-
-					console.log("if ( href !== '' )")
 
 					attributes.set( 'linkHref', href );
 
@@ -227,8 +257,6 @@ export default class LinkCommand extends Command {
 				// If selection has non-collapsed ranges, we change attribute on nodes inside those ranges
 				// omitting nodes where the `linkHref` attribute is disallowed.
 				const ranges = model.schema.getValidRanges( selection.getRanges(), 'linkHref' );
-
-				console.log(" else ")
 
 				// But for the first, check whether the `linkHref` attribute is allowed on selected blocks (e.g. the "image" element).
 				const allowedRanges = [];
@@ -258,7 +286,7 @@ export default class LinkCommand extends Command {
 						const linkText = text || extractTextFromSelection( selection );
 
 						if ( selection.getAttribute( 'linkHref' ) === linkText ) {
-							linkRange = this._updateLinkContent( model, writer, range, href, linkText );
+							linkRange = this._updateLinkContent( model, writer, range, href, linkText, {} );
 							writer.setSelection( writer.createSelection( linkRange ) );
 						}
 					}
@@ -322,8 +350,10 @@ export default class LinkCommand extends Command {
 	 * @param range A range where should be inserted content.
 	 * @param href A link value which should be in the href attribute and in the content.
 	 */
-	private _updateLinkContent( model: Model, writer: Writer, range: Range, href: string, text: any ): Range {
-		const textElement = writer.createText( text || href, { linkHref: href } );
+	private _updateLinkContent( model: Model, writer: Writer, range: Range, href: string, text: any, extraAttributes: any ): Range {
+		extraAttributes.linkHref = href;
+
+		const textElement = writer.createText( text || href, extraAttributes );
 
 		return model.insertContent( textElement, range );
 	}
@@ -332,9 +362,22 @@ export default class LinkCommand extends Command {
 // Returns a text of a link under the collapsed selection or a selection that contains the entire link.
 function extractTextFromSelection( selection: DocumentSelection ): string | null {
 	if ( selection.isCollapsed ) {
-		const firstPosition = selection.getFirstPosition();
+		const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
 
-		return firstPosition!.textNode && firstPosition!.textNode.data;
+		if ( linkBlock.childCount > 1 ) {
+			let text = '';
+			const children = getLinkNodes( linkBlock, selection );
+
+			children.forEach( child => {
+				text += child._data;
+			} );
+
+			return text;
+		} else {
+			const firstPosition = selection.getFirstPosition();
+
+			return firstPosition!.textNode && firstPosition!.textNode.data;
+		}
 	} else {
 		const rangeItems = Array.from( selection.getFirstRange()!.getItems() );
 
@@ -350,4 +393,29 @@ function extractTextFromSelection( selection: DocumentSelection ): string | null
 
 		return null;
 	}
+}
+
+function getLinkNodes( linkBlock: any, selection: DocumentSelection ): Array<any> {
+	const selectedElementIndex = selection.getFirstPosition()!.index;
+	const children = Array.from( linkBlock.getChildren() );
+	let indexBefore = selectedElementIndex - 1;
+	let indexAfter = selectedElementIndex;
+	const linkNodesBeforeSelectedElement = [];
+	const linkNodesAfterSelectedElement = [];
+
+	// @ts-ignore
+	while ( indexBefore >= 0 && children[ indexBefore ]._attrs.get( 'linkHref' ) ) {
+		linkNodesBeforeSelectedElement.push( children[ indexBefore ] );
+		indexBefore--;
+	}
+
+	linkNodesBeforeSelectedElement.reverse();
+
+	// @ts-ignore
+	while ( indexAfter < children.length && children[ indexAfter ]._attrs.get( 'linkHref' ) ) {
+		linkNodesAfterSelectedElement.push( children[ indexAfter ] );
+		indexAfter++;
+	}
+
+	return [ ...linkNodesBeforeSelectedElement, ...linkNodesAfterSelectedElement ];
 }
