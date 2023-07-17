@@ -6,9 +6,8 @@
 import { Plugin } from 'ckeditor5/src/core';
 import { ButtonView } from 'ckeditor5/src/ui';
 import type AttributeCommand from '@ckeditor/ckeditor5-basic-styles/src/attributecommand';
+import { INLINECODE, INLINECODE_COMMAND } from './inlinecodeediting';
 
-const INLINECODE = 'inlineCode';
-const INLINECODE_COMMAND = 'inlineCodeCommand';
 
 export default class InlineCodeUI extends Plugin {
 	public static get pluginName(): 'InlineCodeUI' {

@@ -6,8 +6,8 @@
 import { Plugin } from 'ckeditor5/src/core';
 import AttributeCommand from '@ckeditor/ckeditor5-basic-styles/src/attributecommand';
 
-const INLINECODE = 'inlineCode';
-const INLINECODE_COMMAND = 'inlineCodeCommand';
+export const INLINECODE = 'inlineCode';
+export const INLINECODE_COMMAND = 'inlineCodeCommand';
 
 export default class InlineCodeEditing extends Plugin {
 	public static get pluginName(): 'InlineCodeEditing' {
