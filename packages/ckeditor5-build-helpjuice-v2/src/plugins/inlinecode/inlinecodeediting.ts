@@ -19,6 +19,10 @@ export default class InlineCodeEditing extends Plugin {
 
 		editor.model.schema.extend( '$text', { allowAttributes: INLINECODE } );
 
+		editor.model.schema.setAttributeProperties( INLINECODE, {
+			isFormatting: true
+		} );
+
 		editor.conversion.attributeToElement( {
 			model: INLINECODE,
 			view: {
