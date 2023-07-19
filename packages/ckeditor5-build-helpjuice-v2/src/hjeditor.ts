@@ -135,6 +135,10 @@ function AllowHTMLAttributesToBeRemoved( editor: any ) {
     editor.model.schema.setAttributeProperties( 'htmlAttributes', {
         isFormatting: true
     } );
+
+	editor.model.schema.setAttributeProperties( 'linkHref', {
+        isFormatting: true
+    } );
 }
 
 const colorPalette = [
