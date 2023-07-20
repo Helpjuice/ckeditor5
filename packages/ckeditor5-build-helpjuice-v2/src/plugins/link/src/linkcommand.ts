@@ -359,7 +359,7 @@ function extractTextFromSelection( selection: DocumentSelection ): string | null
 	if ( selection.isCollapsed ) {
 		const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
 
-		if ( linkBlock.childCount > 1 ) {
+		if ( linkBlock && linkBlock.childCount > 1 ) {
 			let text = '';
 			const children = getLinkNodes( linkBlock, selection );
 
@@ -393,7 +393,7 @@ function extractTextFromSelection( selection: DocumentSelection ): string | null
 function selectionIsLink( selection: DocumentSelection ): boolean {
 	const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
 
-	if ( linkBlock.childCount > 1 ) {
+	if ( linkBlock && linkBlock.childCount > 1 ) {
 		const linkChildren = getLinkNodes( linkBlock, selection );
 
 		return linkChildren.length > 0;
