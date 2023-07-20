@@ -224,7 +224,7 @@ export default class LinkCommand extends Command {
 						attributes.set( item, true );
 					} );
 
-					const { end: positionAfter } = model.insertContent( writer.createText( href, attributes ), position );
+					const { end: positionAfter } = model.insertContent( writer.createText( text || href, attributes ), position );
 
 					// Put the selection at the end of the inserted link.
 					// Using end of range returned from insertContent in case nodes with the same attributes got merged.
@@ -344,7 +344,8 @@ export default class LinkCommand extends Command {
 	 * @param range A range where should be inserted content.
 	 * @param href A link value which should be in the href attribute and in the content.
 	 */
-	private _updateLinkContent( model: Model, writer: Writer, range: Range, href: string, text: any, extraAttributes: any ): Range {
+	private _updateLinkContent( model: Model, writer: Writer, range: Range, href: string, text?: any, extraAttributes?: any ): Range {
+		extraAttributes = extraAttributes || {};
 		extraAttributes.linkHref = href;
 
 		const textElement = writer.createText( text || href, extraAttributes );
