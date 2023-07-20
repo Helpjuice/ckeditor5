@@ -132,14 +132,10 @@ HelpjuiceEditor.builtinPlugins = [
 ];
 
 function AllowHTMLAttributesToBeRemoved( editor: any ) {
-    editor.model.schema.setAttributeProperties( 'htmlAttributes', {
-        isFormatting: true
-    } );
+	editor.model.schema.setAttributeProperties( 'htmlAttributes', { isFormatting: true } );
 
-		// allow removing attributes from <a> tags
-		editor.model.schema.setAttributeProperties( 'htmlA', {
-			isFormatting: true
-		} );
+	// allow removing html attributes from <a> tags
+	editor.model.schema.setAttributeProperties( 'htmlA', { isFormatting: true } );
 }
 
 const colorPalette = [
