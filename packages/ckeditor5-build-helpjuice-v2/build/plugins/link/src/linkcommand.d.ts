@@ -109,7 +109,7 @@ export default class LinkCommand extends Command {
      * @param href Link destination.
      * @param manualDecoratorIds The information about manual decorator attributes to be applied or removed upon execution.
      */
-    execute(href: string, text: string, manualDecoratorIds?: Record<string, boolean>): void;
+    execute(href: string, text?: string | null, manualDecoratorIds?: Record<string, boolean>): void;
     /**
      * Provides information whether a decorator with a given name is present in the currently processed selection.
      *
