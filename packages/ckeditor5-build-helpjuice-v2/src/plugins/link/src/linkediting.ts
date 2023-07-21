@@ -113,8 +113,7 @@ export default class LinkEditing extends Plugin {
 				view: {
 					name: 'a',
 					attributes: {
-						href: true,
-						'data-helpjuice-id': true
+						href: true
 					}
 				},
 				model: {
