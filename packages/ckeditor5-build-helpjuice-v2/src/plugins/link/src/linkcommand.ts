@@ -150,7 +150,7 @@ export default class LinkCommand extends Command {
 	 * @param href Link destination.
 	 * @param manualDecoratorIds The information about manual decorator attributes to be applied or removed upon execution.
 	 */
-	public override execute( href: string, text: string, manualDecoratorIds: Record<string, boolean> = {} ): void {
+	public override execute( href: string, text: string | null = null, manualDecoratorIds: Record<string, boolean> = {} ): void {
 		const model = this.editor.model;
 		const selection = model.document.selection;
 		// Stores information about manual decorators to turn them on/off when command is applied.
