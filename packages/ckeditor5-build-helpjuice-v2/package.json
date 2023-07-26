@@ -59,7 +59,9 @@
     "@ckeditor/ckeditor5-source-editing": "^38.0.0",
     "@ckeditor/ckeditor5-style": "^38.0.0",
     "@ckeditor/ckeditor5-table": "^38.0.0",
-    "@ckeditor/ckeditor5-typing": "^38.0.0"
+    "@ckeditor/ckeditor5-typing": "^38.0.0",
+    "mermaid": "9.1.7",
+    "lodash-es": "^4.17.15"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "^38.0.0",

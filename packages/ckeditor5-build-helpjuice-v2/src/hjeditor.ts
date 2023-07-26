@@ -56,6 +56,8 @@ import { Link, LinkImage } from './plugins/link';
 import EmbeddedIFrame from './plugins/embeddediframe/embeddediframe';
 import InlineCode from './plugins/inlinecode/inlinecode';
 
+import Mermaid from './plugins/mermaid/src/mermaid';
+
 const { objectInline, objectLeft, objectRight, objectCenter } = icons;
 
 const VIDEO_EXTENSIONS_REGEX = 'mpg|mp4|wmv|mpeg|webm|mkv|flv|vob|ogv|ogg|avi|rm|rmvb|asf|amv|mp2|mpe|mpv|m4v|svi|3gp|mov';
@@ -129,7 +131,9 @@ HelpjuiceEditor.builtinPlugins = [
 	Superscript,
 	CmdDelete,
 	EmbeddedIFrame,
-	InlineCode
+	InlineCode,
+	// @ts-ignore
+	Mermaid
 ];
 
 function AllowHTMLAttributesToBeRemoved( editor: any ) {
@@ -479,6 +483,7 @@ HelpjuiceEditor.defaultConfig = {
 			'link',
 			'mediaEmbed',
 			'insertTable',
+			'mermaid',
 			'|',
 			'alignment',
 			'horizontalLine',
