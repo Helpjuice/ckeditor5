@@ -55,11 +55,13 @@
     "@ckeditor/ckeditor5-mention": "^38.0.0",
     "@ckeditor/ckeditor5-paragraph": "^38.0.0",
     "@ckeditor/ckeditor5-paste-from-office": "^38.0.0",
+    "@ckeditor/ckeditor5-real-time-collaboration": "^38.0.0",
     "@ckeditor/ckeditor5-remove-format": "^38.0.0",
     "@ckeditor/ckeditor5-source-editing": "^38.0.0",
     "@ckeditor/ckeditor5-style": "^38.0.0",
     "@ckeditor/ckeditor5-table": "^38.0.0",
-    "@ckeditor/ckeditor5-typing": "^38.0.0"
+    "@ckeditor/ckeditor5-typing": "^38.0.0",
+    "@ckeditor/ckeditor5-watchdog": "^38.0.0"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "^38.0.0",

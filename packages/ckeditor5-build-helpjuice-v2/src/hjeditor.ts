@@ -30,6 +30,9 @@ import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed';
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
 import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import { Style } from '@ckeditor/ckeditor5-style';
+import { EditorWatchdog } from '@ckeditor/ckeditor5-watchdog';
+import { RealTimeCollaborativeEditing, PresenceList } from '@ckeditor/ckeditor5-real-time-collaboration';
+import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
 
 // Image Plugin
 import { ImageStyle, ImageResize, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
@@ -60,7 +63,7 @@ const { objectInline, objectLeft, objectRight, objectCenter } = icons;
 
 const VIDEO_EXTENSIONS_REGEX = 'mpg|mp4|wmv|mpeg|webm|mkv|flv|vob|ogv|ogg|avi|rm|rmvb|asf|amv|mp2|mpe|mpv|m4v|svi|3gp|mov';
 
-export default class HelpjuiceEditor extends ClassicEditorBase { }
+class HelpjuiceEditor extends ClassicEditorBase { }
 
 // Plugins to include in the build.
 HelpjuiceEditor.builtinPlugins = [
@@ -129,7 +132,10 @@ HelpjuiceEditor.builtinPlugins = [
 	Superscript,
 	CmdDelete,
 	EmbeddedIFrame,
-	InlineCode
+	InlineCode,
+	RealTimeCollaborativeEditing,
+	PresenceList,
+	CloudServices
 ];
 
 function AllowHTMLAttributesToBeRemoved( editor: any ) {
@@ -538,3 +544,5 @@ HelpjuiceEditor.defaultConfig = {
 		]
 	}
 };
+
+export default { HelpjuiceEditor, EditorWatchdog };
