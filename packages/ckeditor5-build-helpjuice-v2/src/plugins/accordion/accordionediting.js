@@ -210,7 +210,7 @@ export default class AccordionEditing extends Plugin {
 		conversion.for("editingDowncast").elementToElement({
 			model: "accordionInfo",
 			view: (modelElement, { writer: viewWriter }) => {
-				const a = viewWriter.createEditableElement("a", { class: "helpjuice-accordion-info", href: "https://help.helpjuice.com/how-to-insert-accordions", target: "_blank" });
+				const a = viewWriter.createEditableElement("a", { class: "helpjuice-accordion-info", href: "https://help.helpjuice.com/how-to-insert-accordions", target: "_blank", title: "Read more about accordions" });
 				return a;
 			}
 		});
