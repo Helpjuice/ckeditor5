@@ -55,6 +55,12 @@ export default class TabEditing extends Plugin {
 			isLimit: true,
 			allowIn: "tab"
 		});
+
+		schema.register("tabInfo", {
+			isObject: true,
+			isLimit: true,
+			allowIn: "tab"
+		});
 	}
 
 	_defineConverters() {
@@ -192,6 +198,28 @@ export default class TabEditing extends Plugin {
 				const div = viewWriter.createEditableElement("div", { class: "helpjuice-tab-delete" });
 
 				return toWidget(div, viewWriter);
+			}
+		});
+
+		conversion.for("upcast").elementToElement({
+			model: "tabInfo",
+			view: {
+				name: "div",
+				classes: "helpjuice-tab-info"
+			}
+		});
+		conversion.for("dataDowncast").elementToElement({
+			model: "tabInfo",
+			view: {
+				name: "div",
+				classes: "helpjuice-tab-info"
+			}
+		});
+		conversion.for("editingDowncast").elementToElement({
+			model: "tabInfo",
+			view: (modelElement, { writer: viewWriter }) => {
+				const a = viewWriter.createEditableElement("a", { class: "helpjuice-tab-info", href: "https://help.helpjuice.com/how-to-insert-tabs", target: "_blank" });
+				return a;
 			}
 		});
 	}

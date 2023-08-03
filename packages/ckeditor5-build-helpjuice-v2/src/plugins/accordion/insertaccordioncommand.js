@@ -34,11 +34,13 @@ function createAccordion(writer) {
 
 	const accordionToggle = writer.createElement("accordionToggle");
 	const accordionDelete = writer.createElement("accordionDelete");
+	const accordionInfo = writer.createElement("accordionInfo");
 
 	writer.append(accordionTitle, accordion);
 	writer.append(accordionBody, accordion);
 	writer.append(accordionToggle, accordion);
 	writer.append(accordionDelete, accordion);
+	writer.append(accordionInfo, accordion);
 
 	// CREATE EMPTY ELEMENT TO BE INSERTED AFTER THE ACCORDION
 	const emptyParagraph = writer.createElement("paragraph");
