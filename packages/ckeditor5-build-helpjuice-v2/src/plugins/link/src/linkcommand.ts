@@ -181,7 +181,6 @@ export default class LinkCommand extends Command {
 					// get attributes that are shared by all children
 					const sharedAttributes: any = getSharedAttributes( children );
 
-
 					for ( const attribute in sharedAttributes ) {
 						if ( sharedAttributes[ attribute ] !== null ) {
 							extraAttributes[ attribute ] = sharedAttributes[ attribute ];
@@ -400,9 +399,8 @@ function selectionIsLink( selection: DocumentSelection ): boolean {
 	} else {
 		const selectedElementIndex = selection.getFirstPosition()!.index;
 		const children = Array.from( linkBlock.getChildren() );
-
 		// @ts-ignore
-		return children[ selectedElementIndex ]._attrs.get( 'linkHref' ) !== undefined;
+		return ( children[ selectedElementIndex ] && children[ selectedElementIndex ]._attrs.get( 'linkHref' ) !== undefined ) || false;
 	}
 }
 
