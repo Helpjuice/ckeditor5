@@ -154,6 +154,12 @@ export default class DecisionTreeEditing extends Plugin {
 			isLimit: true,
 			allowIn: "decisionTree"
 		});
+
+		schema.register("decisionTreeInfo", {
+			isObject: true,
+			isLimit: true,
+			allowIn: "decisionTree"
+		});
 	}
 
 	_defineConverters() {
@@ -534,6 +540,28 @@ export default class DecisionTreeEditing extends Plugin {
 			view: (modelElement, { writer: viewWriter }) => {
 				const div = viewWriter.createEditableElement("div", { class: "helpjuice-decision-tree-delete" });
 				return toWidget(div, viewWriter);
+			}
+		});
+
+		conversion.for("upcast").elementToElement({
+			model: "decisionTreeInfo",
+			view: {
+				name: "div",
+				classes: "helpjuice-decision-tree-info"
+			}
+		});
+		conversion.for("dataDowncast").elementToElement({
+			model: "decisionTreeInfo",
+			view: {
+				name: "div",
+				classes: "helpjuice-decision-tree-info"
+			}
+		});
+		conversion.for("editingDowncast").elementToElement({
+			model: "decisionTreeInfo",
+			view: (modelElement, { writer: viewWriter }) => {
+				const a = viewWriter.createEditableElement("a", { class: "helpjuice-decision-tree-info", href: "https://help.helpjuice.com/article-editor/article-decision-trees", target: "_blank", title: "Read more about decision trees" });
+				return a;
 			}
 		});
 	}
