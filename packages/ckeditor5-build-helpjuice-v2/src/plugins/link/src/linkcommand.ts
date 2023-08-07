@@ -170,20 +170,23 @@ export default class LinkCommand extends Command {
 			if ( selection.isCollapsed ) {
 				const position = selection.getFirstPosition()!;
 				const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
-				const children = getLinkNodes( linkBlock, selection );
 				let extraAttributes: any = {};
 
 				// maintain extra attributes
-				if ( linkBlock.childCount === 1 || ( linkBlock.childCount === 2 && children.length === 1 ) ) {
-					extraAttributes = Object.fromEntries( children[ 0 ]._attrs );
-					delete extraAttributes.linkHref;
-				} else {
-					// get attributes that are shared by all children
-					const sharedAttributes: any = getSharedAttributes( children );
+				if ( linkBlock ) {
+					const children = getLinkNodes( linkBlock, selection );
 
-					for ( const attribute in sharedAttributes ) {
-						if ( sharedAttributes[ attribute ] !== null ) {
-							extraAttributes[ attribute ] = sharedAttributes[ attribute ];
+					if ( linkBlock.childCount === 1 || ( linkBlock.childCount === 2 && children.length === 1 ) ) {
+						extraAttributes = Object.fromEntries( children[ 0 ]._attrs );
+						delete extraAttributes.linkHref;
+					} else {
+						// get attributes that are shared by all children
+						const sharedAttributes: any = getSharedAttributes( children );
+
+						for ( const attribute in sharedAttributes ) {
+							if ( sharedAttributes[ attribute ] !== null ) {
+								extraAttributes[ attribute ] = sharedAttributes[ attribute ];
+							}
 						}
 					}
 				}
