@@ -177,7 +177,7 @@ export default class DecisionTreeEditing extends Plugin {
 		conversion.for("editingDowncast").elementToElement({
 			model: "decisionTree",
 			view: (modelElement, { writer: viewWriter }) => {
-				const link = viewWriter.createAttributeElement("a", {
+				const link = viewWriter.createUIElement("a", {
 					class: 'helpjuice-decision-tree-info',
 					href: 'https://help.helpjuice.com/article-editor/article-decision-trees',
 					target: '_blank',

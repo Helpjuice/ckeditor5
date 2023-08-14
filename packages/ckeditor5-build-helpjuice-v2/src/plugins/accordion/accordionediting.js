@@ -77,14 +77,14 @@ export default class AccordionEditing extends Plugin {
 		conversion.for("editingDowncast").elementToElement({
 			model: "accordion",
 			view: (modelElement, { writer: viewWriter }) => {
-				const link = viewWriter.createAttributeElement("a", {
+				const link = viewWriter.createUIElement("a", {
 					class: 'helpjuice-accordion-info',
 					href: 'https://help.helpjuice.com/how-to-insert-accordions',
 					target: '_blank',
 					title: 'Read more about accordions'
 				});
 				const div = viewWriter.createContainerElement("div", {
-				class: "helpjuice-accordion",
+					class: "helpjuice-accordion",
 					"data-controller": modelElement.getAttribute("data-controller")
 				}, [ link ]);
 
