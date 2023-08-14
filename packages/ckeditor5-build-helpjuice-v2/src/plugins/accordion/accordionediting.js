@@ -48,12 +48,6 @@ export default class AccordionEditing extends Plugin {
 			isLimit: true,
 			allowIn: "accordion"
 		});
-
-		schema.register("accordionInfo", {
-			isObject: true,
-			isLimit: true,
-			allowIn: "accordion"
-		});
 	}
 
 	_defineConverters() {
@@ -83,10 +77,16 @@ export default class AccordionEditing extends Plugin {
 		conversion.for("editingDowncast").elementToElement({
 			model: "accordion",
 			view: (modelElement, { writer: viewWriter }) => {
-				const div = viewWriter.createContainerElement("div", {
-					class: "helpjuice-accordion",
-					"data-controller": modelElement.getAttribute("data-controller")
+				const link = viewWriter.createAttributeElement("a", {
+					class: 'helpjuice-accordion-info',
+					href: 'https://help.helpjuice.com/how-to-insert-accordions',
+					target: '_blank',
+					title: 'Read more about accordions'
 				});
+				const div = viewWriter.createContainerElement("div", {
+				class: "helpjuice-accordion",
+					"data-controller": modelElement.getAttribute("data-controller")
+				}, [ link ]);
 
 				return toWidget(div, viewWriter);
 			}
@@ -190,28 +190,6 @@ export default class AccordionEditing extends Plugin {
 			view: (modelElement, { writer: viewWriter }) => {
 				const div = viewWriter.createEditableElement("div", { class: "helpjuice-accordion-delete" });
 				return toWidget(div, viewWriter);
-			}
-		});
-
-		conversion.for("upcast").elementToElement({
-			model: "accordionInfo",
-			view: {
-				name: "div",
-				classes: "helpjuice-accordion-info"
-			}
-		});
-		conversion.for("dataDowncast").elementToElement({
-			model: "accordionInfo",
-			view: {
-				name: "div",
-				classes: "helpjuice-accordion-info"
-			}
-		});
-		conversion.for("editingDowncast").elementToElement({
-			model: "accordionInfo",
-			view: (modelElement, { writer: viewWriter }) => {
-				const a = viewWriter.createEditableElement("a", { class: "helpjuice-accordion-info", href: "https://help.helpjuice.com/how-to-insert-accordions", target: "_blank", title: "Read more about accordions" });
-				return a;
 			}
 		});
 	}

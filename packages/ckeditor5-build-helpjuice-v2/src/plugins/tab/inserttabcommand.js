@@ -33,13 +33,11 @@ function createTab(writer) {
 
 	const tabToggle = writer.createElement('tabToggle');
 	const tabDelete = writer.createElement('tabDelete');
-	const tabInfo = writer.createElement('tabInfo');
 
 	writer.append(tabTitle, tab);
 	writer.append(tabBody, tab);
 	writer.append(tabToggle, tab);
 	writer.append(tabDelete, tab);
-	writer.append(tabInfo, tab);
 
 	// CREATE EMPTY PARAGRAPH
 	const emptyParagraph = writer.createElement("paragraph")

@@ -83,14 +83,10 @@ function createDecisionTree(writer) {
 	// Create delete button
 	const decisionTreeDelete = writer.createElement("decisionTreeDelete");
 
-	// Create info button
-	const decisionTreeInfo = writer.createElement("decisionTreeInfo");
-
 	// Append All Content into Decision Tree Root Element
 	writer.append(decisionTreeFirstQuestion, decisionTree);
 	writer.append(decisionTreeTabs, decisionTree);
 	writer.append(decisionTreeDelete, decisionTree);
-	writer.append(decisionTreeInfo, decisionTree);
 
 	// CREATE EMPTY PARAGRAPH
 	const emptyParagraph = writer.createElement("paragraph");
