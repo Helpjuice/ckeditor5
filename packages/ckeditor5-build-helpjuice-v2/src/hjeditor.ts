@@ -352,13 +352,12 @@ HelpjuiceEditor.defaultConfig = {
 			},
 			{
 				name: 'loomProvider',
-				url: new RegExp(`^https:\\/\\/www\\.loom\\.com\\/share\\/(\\w+)`),
+				url: /^https:\/\/www\.loom\.com\/share\/(\w+)/,
 				html: match => {
-					const getUrl = match.input;
-					const videoId = getUrl?.split('/').pop();
+					const videoId = match[ 1 ];
 
 					return (
-						`<div style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 56.2493%;"><iframe src="https://www.loom.com/embed/${videoId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe></div>`
+						`<div style="position: relative; height: 0; padding-bottom: 56.2493%;"><iframe src="https://www.loom.com/embed/${videoId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe></div>`
 					);
 				}
 			}
