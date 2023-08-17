@@ -31,6 +31,9 @@ import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
 import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import { Style } from '@ckeditor/ckeditor5-style';
 
+import { SlashCommand } from '@ckeditor/ckeditor5-slash-command';
+
+
 // Image Plugin
 import { ImageStyle, ImageResize, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
 import CustomImage from './plugins/image/image';
@@ -54,7 +57,6 @@ import { FontFamily, FontSize, FontColor, FontBackgroundColor } from './plugins/
 import { Link, LinkImage } from './plugins/link';
 
 import EmbeddedIFrame from './plugins/embeddediframe/embeddediframe';
-import InlineCode from './plugins/inlinecode/inlinecode';
 
 const { objectInline, objectLeft, objectRight, objectCenter } = icons;
 
@@ -129,7 +131,7 @@ HelpjuiceEditor.builtinPlugins = [
 	Superscript,
 	CmdDelete,
 	EmbeddedIFrame,
-	InlineCode
+	
 ];
 
 function AllowHTMLAttributesToBeRemoved( editor: any ) {
@@ -465,6 +467,11 @@ HelpjuiceEditor.defaultConfig = {
 				name: "Uppercase",
 				element: "span",
 				classes: ["fr-text-uppercase"]
+			},
+			{
+				name: "Inline Code",
+				element: "code",
+				classes: ["fr-text-code"]
 			}
 		]
 	},
@@ -484,11 +491,9 @@ HelpjuiceEditor.defaultConfig = {
 			'highlight',
 			'htmlembed',
 			'codeblock',
-			'inlineCode',
 			'|',
 			'filesmanager',
 			'link',
-			'mediaEmbed',
 			'insertTable',
 			'|',
 			'alignment',
