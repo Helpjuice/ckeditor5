@@ -127,8 +127,7 @@ HelpjuiceEditor.builtinPlugins = [
 	Subscript,
 	Superscript,
 	CmdDelete,
-	EmbeddedIFrame,
-	
+	EmbeddedIFrame
 ];
 
 function AllowHTMLAttributesToBeRemoved( editor: any ) {
