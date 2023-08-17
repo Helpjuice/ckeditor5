@@ -31,9 +31,6 @@ import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
 import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import { Style } from '@ckeditor/ckeditor5-style';
 
-import { SlashCommand } from '@ckeditor/ckeditor5-slash-command';
-
-
 // Image Plugin
 import { ImageStyle, ImageResize, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
 import CustomImage from './plugins/image/image';
