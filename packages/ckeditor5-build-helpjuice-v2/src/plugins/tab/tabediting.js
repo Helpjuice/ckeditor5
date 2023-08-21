@@ -84,10 +84,16 @@ export default class TabEditing extends Plugin {
 		conversion.for("editingDowncast").elementToElement({
 			model: "tab",
 			view: (modelElement, { writer: viewWriter }) => {
+				const link = viewWriter.createUIElement("a", {
+					class: 'helpjuice-tab-info',
+					href: 'https://help.helpjuice.com/how-to-insert-tabs',
+					target: '_blank',
+					title: 'Read more about tabs'
+				});
 				const div = viewWriter.createContainerElement("div", {
 					class: "helpjuice-tab",
 					"data-controller": modelElement.getAttribute("data-controller")
-				});
+				}, [ link ]);
 
 				return toWidget(div, viewWriter);
 			}
