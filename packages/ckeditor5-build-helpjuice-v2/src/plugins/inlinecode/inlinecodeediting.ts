@@ -26,7 +26,8 @@ export default class InlineCodeEditing extends Plugin {
 		editor.conversion.attributeToElement( {
 			model: INLINECODE,
 			view: {
-				name: 'code'
+				name: 'code',
+				class: 'fr-text-code'
 			}
 		} );
 

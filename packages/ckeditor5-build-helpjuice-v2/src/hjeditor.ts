@@ -465,6 +465,11 @@ HelpjuiceEditor.defaultConfig = {
 				name: "Uppercase",
 				element: "span",
 				classes: ["fr-text-uppercase"]
+			},
+			{
+				name: "Inline Code",
+				element: "code",
+				classes: ["fr-text-code"]
 			}
 		]
 	},
