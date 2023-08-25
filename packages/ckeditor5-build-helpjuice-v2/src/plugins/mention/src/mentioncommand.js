@@ -116,6 +116,7 @@ export default class MentionCommand extends Command {
 			const hrefAttributes = Object.fromEntries(attributesWithMention).mention;
 			const attributes = Object.fromEntries(attributesWithMention);
 			attributes.linkHref = hrefAttributes.codename;
+			attributes.linkOpenInNewTab = true;
 
 			// Replace a range with the text with a mention.
 			model.insertContent( writer.createText( mentionText, attributes ), range );
