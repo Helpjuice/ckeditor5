@@ -175,7 +175,7 @@ function SpecialCharactersEmoji( editor: any ) {
 			{ title: 'rocket', character: '🚀' },
 			{ title: 'wind blowing face', character: '🌬️' },
 			{ title: 'floppy disk', character: '💾' },
-			{ title: 'Labtop', character: '💻' },
+			{ title: 'Laptop', character: '💻' },
 			{ title: 'Mobile Phone', character: '📱' },
 			{ title: 'heart', character: '❤️' },
 			{ title: 'Sparkling Heart', character: '💖' },
