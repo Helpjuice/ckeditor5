@@ -30,6 +30,7 @@ import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed';
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
 import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import { Style } from '@ckeditor/ckeditor5-style';
+import { SpecialCharacters, SpecialCharactersArrows, SpecialCharactersMathematical, SpecialCharactersText, SpecialCharactersEssentials, SpecialCharactersLatin } from '@ckeditor/ckeditor5-special-characters';
 
 // Image Plugin
 import { ImageStyle, ImageResize, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
@@ -129,7 +130,14 @@ HelpjuiceEditor.builtinPlugins = [
 	Superscript,
 	CmdDelete,
 	EmbeddedIFrame,
-	InlineCode
+	InlineCode,
+	SpecialCharacters,
+	SpecialCharactersEmoji,
+	SpecialCharactersArrows,
+	SpecialCharactersMathematical,
+	SpecialCharactersText,
+	SpecialCharactersEssentials,
+	SpecialCharactersLatin
 ];
 
 function AllowHTMLAttributesToBeRemoved( editor: any ) {
@@ -137,6 +145,51 @@ function AllowHTMLAttributesToBeRemoved( editor: any ) {
 
 	// allow removing html attributes from <a> tags
 	editor.model.schema.setAttributeProperties( 'htmlA', { isFormatting: true } );
+}
+
+function SpecialCharactersEmoji( editor: any ) {
+    editor.plugins.get( 'SpecialCharacters' ).addItems( 'Emoji', [
+			{ title: 'smiley face', character: '😊' },
+			{ title: 'Grinning Face', character: '😀' },
+			{ title: 'Face with Tears of Joy', character: '😂' },
+			{ title: 'Smiling Face with Smiling Eyes', character: '😊' },
+			{ title: 'Smiling Face with Heart-Eyes', character: '😍' },
+			{ title: 'Folded Hands (Prayer)', character: '🙏' },
+			{ title: 'Thinking Face', character: '🤔' },
+			{ title: 'Smiling Face with Sunglasses', character: '😎' },
+			{ title: 'Face with Rolling Eyes', character: '🙄' },
+			{ title: 'Party Popper', character: '🎉' },
+			{ title: 'Glowing Star', character: '🌟' },
+			{ title: 'Check Mark', character: '✅' },
+			{ title: 'Cross Mark', character: '❌' },
+			{ title: 'Hibiscus', character: '🌺' },
+			{ title: 'Pizza', character: '🍕' },
+			{ title: 'Dog Face', character: '🐶' },
+			{ title: 'Cat Face', character: '🐱' },
+			{ title: 'Rainbow', character: '🌈' },
+			{ title: 'Sun with Face', character: '🌞' },
+			{ title: 'Cherry Blossom', character: '🌸' },
+			{ title: 'Crescent Moon', character: '🌙' },
+			{ title: 'Hundred Points Symbol', character: '💯' },
+			{ title: 'Fire', character: '🔥' },
+			{ title: 'rocket', character: '🚀' },
+			{ title: 'wind blowing face', character: '🌬️' },
+			{ title: 'floppy disk', character: '💾' },
+			{ title: 'Laptop', character: '💻' },
+			{ title: 'Mobile Phone', character: '📱' },
+			{ title: 'heart', character: '❤️' },
+			{ title: 'Sparkling Heart', character: '💖' },
+			{ title: 'Thumbs Up', character: '👍' },
+			{ title: 'Thumbs Down', character: '👎' },
+			{ title: 'Clapping Hands', character: '👏' },
+			{ title: 'Raised Fist', character: '✊' },
+			{ title: 'Victory Hand', character: '✌️' },
+			{ title: 'Heart Eyes Cat', character: '😻' },
+			{ title: 'Unicorn', character: '🦄' },
+			{ title: 'Alien', character: '👽' },
+			{ title: 'Ghost', character: '👻' },
+			{ title: 'Skull', character: '💀' }
+		], { label: 'Emojis' });
 }
 
 const colorPalette = [
@@ -483,6 +536,7 @@ HelpjuiceEditor.defaultConfig = {
 			'italic',
 			'underline',
 			'highlight',
+			'specialCharacters',
 			'|',
 			'style',
 			'extraformattingdropdown',
