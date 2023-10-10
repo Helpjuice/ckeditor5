@@ -47,11 +47,16 @@ export function upcastImageFigure( imageUtils: ImageUtils ): ( dispatcher: Upcas
 		}
 
 		// Find an image element inside the figure element.
-		const viewImage = imageUtils.findViewImgElement( data.viewItem );
+		let viewImage = imageUtils.findViewImgElement( data.viewItem );
 
 		// Do not convert if image element is absent or was already converted.
 		if ( !viewImage || !conversionApi.consumable.test( viewImage, { name: true } ) ) {
 			return;
+		}
+
+		// If the image is wrapped in a link, then convert the link instead of the image.
+		if ( viewImage && viewImage.parent && viewImage.parent.name === 'a' ) {
+			viewImage = viewImage.parent;
 		}
 
 		// Consume the figure to prevent other converters from processing it again.
