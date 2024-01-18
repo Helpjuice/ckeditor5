@@ -462,6 +462,9 @@ HelpjuiceEditor.defaultConfig = {
 			},
 			{
 				name: 'ol'
+			},
+			{
+				name: 'style'
 			}
 		]
 	},
