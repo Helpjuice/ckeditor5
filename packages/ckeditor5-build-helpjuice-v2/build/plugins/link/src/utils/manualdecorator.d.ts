@@ -1,15 +1,15 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/utils/manualdecorator
  */
-import { type ArrayOrItem } from 'ckeditor5/src/utils';
-import type { NormalizedLinkDecoratorManualDefinition } from '../utils';
+import { type ArrayOrItem } from 'ckeditor5/src/utils.js';
+import type { NormalizedLinkDecoratorManualDefinition } from '../utils.js';
 declare const ManualDecorator_base: {
-    new (): import("ckeditor5/src/utils").Observable;
-    prototype: import("ckeditor5/src/utils").Observable;
+    new (): import("ckeditor5/src/utils.js").Observable;
+    prototype: import("ckeditor5/src/utils.js").Observable;
 };
 /**
  * Helper class that stores manual decorators with observable {@link module:link/utils/manualdecorator~ManualDecorator#value}

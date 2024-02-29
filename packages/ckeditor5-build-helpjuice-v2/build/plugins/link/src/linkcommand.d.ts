@@ -1,14 +1,14 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/linkcommand
  */
-import { Command } from 'ckeditor5/src/core';
-import { Collection } from 'ckeditor5/src/utils';
-import AutomaticDecorators from './utils/automaticdecorators';
-import type ManualDecorator from './utils/manualdecorator';
+import { Command } from 'ckeditor5/src/core.js';
+import { Collection } from 'ckeditor5/src/utils.js';
+import AutomaticDecorators from './utils/automaticdecorators.js';
+import type ManualDecorator from './utils/manualdecorator.js';
 /**
  * The link command. It is used by the {@link module:link/link~Link link feature}.
  */

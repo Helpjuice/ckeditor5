@@ -1,11 +1,11 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/linkconfig
  */
-import type { ArrayOrItem } from 'ckeditor5/src/utils';
+import type { ArrayOrItem } from 'ckeditor5/src/utils.js';
 /**
  * The configuration of the {@link module:link/link~Link link feature}.
  *
@@ -43,6 +43,25 @@ export interface LinkConfig {
      * **NOTE:** If no configuration is provided, the editor will not auto-fix the links.
      */
     defaultProtocol?: string;
+    /**
+     * When set to `true`, the form will accept an empty value in the URL field, creating a link with an empty `href` (`<a href="">`).
+     *
+     * ```ts
+     * ClassicEditor
+     * 	.create( editorElement, {
+     * 		link: {
+     * 			allowCreatingEmptyLinks: true
+     * 		}
+     * 	} )
+     * 	.then( ... )
+     * 	.catch( ... );
+     * ```
+     *
+     * **NOTE:** This option only adds form validation. If a link with an empty `href` is loaded into the editor, it will be left as-is.
+     *
+     * @default false
+     */
+    allowCreatingEmptyLinks?: boolean;
     /**
      * When set to `true`, the `target="blank"` and `rel="noopener noreferrer"` attributes are automatically added to all external links
      * in the editor. "External links" are all links in the editor content starting with `http`, `https`, or `//`.

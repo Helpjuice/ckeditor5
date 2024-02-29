@@ -1,13 +1,13 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/linkediting
  */
-import { Plugin, type Editor } from 'ckeditor5/src/core';
-import { Input, TwoStepCaretMovement } from 'ckeditor5/src/typing';
-import { ClipboardPipeline } from 'ckeditor5/src/clipboard';
+import { Plugin, type Editor } from 'ckeditor5/src/core.js';
+import { Input, TwoStepCaretMovement } from 'ckeditor5/src/typing.js';
+import { ClipboardPipeline } from 'ckeditor5/src/clipboard.js';
 import '../theme/link.css';
 /**
  * The link engine feature.
@@ -19,7 +19,7 @@ export default class LinkEditing extends Plugin {
     /**
      * @inheritDoc
      */
-    static get pluginName(): 'LinkEditing';
+    static get pluginName(): "LinkEditing";
     /**
      * @inheritDoc
      */
@@ -58,47 +58,11 @@ export default class LinkEditing extends Plugin {
      */
     private _enableLinkOpen;
     /**
-     * Starts listening to {@link module:engine/model/model~Model#event:insertContent} and corrects the model
-     * selection attributes if the selection is at the end of a link after inserting the content.
+     * Watches the DocumentSelection attribute changes and removes link decorator attributes when the linkHref attribute is removed.
      *
-     * The purpose of this action is to improve the overall UX because the user is no longer "trapped" by the
-     * `linkHref` attribute of the selection and they can type a "clean" (`linkHref`–less) text right away.
-     *
-     * See https://github.com/ckeditor/ckeditor5/issues/6053.
+     * This is to ensure that there is no left-over link decorator attributes on the document selection that is no longer in a link.
      */
-    private _enableInsertContentSelectionAttributesFixer;
-    /**
-     * Starts listening to {@link module:engine/view/document~Document#event:mousedown} and
-     * {@link module:engine/view/document~Document#event:selectionChange} and puts the selection before/after a link node
-     * if clicked at the beginning/ending of the link.
-     *
-     * The purpose of this action is to allow typing around the link node directly after a click.
-     *
-     * See https://github.com/ckeditor/ckeditor5/issues/1016.
-     */
-    private _enableClickingAfterLink;
-    /**
-     * Starts listening to {@link module:engine/model/model~Model#deleteContent} and {@link module:engine/model/model~Model#insertContent}
-     * and checks whether typing over the link. If so, attributes of removed text are preserved and applied to the inserted text.
-     *
-     * The purpose of this action is to allow modifying a text without loosing the `linkHref` attribute (and other).
-     *
-     * See https://github.com/ckeditor/ckeditor5/issues/4762.
-     */
-    private _enableTypingOverLink;
-    /**
-     * Starts listening to {@link module:engine/model/model~Model#deleteContent} and checks whether
-     * removing a content right after the "linkHref" attribute.
-     *
-     * If so, the selection should not preserve the `linkHref` attribute. However, if
-     * the {@link module:typing/twostepcaretmovement~TwoStepCaretMovement} plugin is active and
-     * the selection has the "linkHref" attribute due to overriden gravity (at the end), the `linkHref` attribute should stay untouched.
-     *
-     * The purpose of this action is to allow removing the link text and keep the selection outside the link.
-     *
-     * See https://github.com/ckeditor/ckeditor5/issues/7521.
-     */
-    private _handleDeleteContentAfterLink;
+    private _enableSelectionAttributesFixer;
     /**
      * Enables URL fixing on pasting.
      */

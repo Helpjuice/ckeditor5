@@ -1,13 +1,13 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/utils
  */
-import type { DowncastConversionApi, Element, Schema, ViewAttributeElement, ViewNode, ViewDocumentFragment } from 'ckeditor5/src/engine';
-import type { LocaleTranslate } from 'ckeditor5/src/utils';
-import type { LinkDecoratorAutomaticDefinition, LinkDecoratorDefinition, LinkDecoratorManualDefinition } from './linkconfig';
+import type { DowncastConversionApi, Element, Schema, ViewAttributeElement, ViewNode, ViewDocumentFragment } from 'ckeditor5/src/engine.js';
+import type { LocaleTranslate } from 'ckeditor5/src/utils.js';
+import type { LinkDecoratorAutomaticDefinition, LinkDecoratorDefinition, LinkDecoratorManualDefinition } from './linkconfig.js';
 /**
  * A keystroke used by the {@link module:link/linkui~LinkUI link UI feature}.
  */
