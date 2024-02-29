@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -7,19 +7,19 @@
  * @module heading/headingui
  */
 
-import { Plugin, type Command } from 'ckeditor5/src/core';
+import { Plugin, type Command } from 'ckeditor5/src/core.js';
 import {
 	ViewModel,
 	createDropdown,
 	addListToDropdown,
 	type ButtonExecuteEvent,
 	type ListDropdownItemDefinition
-} from 'ckeditor5/src/ui';
-import { Collection } from 'ckeditor5/src/utils';
-import type { ParagraphCommand } from 'ckeditor5/src/paragraph';
+} from 'ckeditor5/src/ui.js';
+import { Collection } from 'ckeditor5/src/utils.js';
+import type { ParagraphCommand } from 'ckeditor5/src/paragraph.js';
 
-import { getLocalizedOptions } from './utils';
-import type HeadingCommand from './headingcommand';
+import { getLocalizedOptions } from './utils.js';
+import type HeadingCommand from './headingcommand.js';
 
 import '../theme/heading.css';
 
@@ -30,8 +30,8 @@ export default class HeadingUI extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
-	public static get pluginName(): 'HeadingUI' {
-		return 'HeadingUI';
+	public static get pluginName() {
+		return 'HeadingUI' as const;
 	}
 
 	/**

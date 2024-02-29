@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -101,20 +101,20 @@ export default class LinkFormView extends View {
 	 * @param locale The localization services instance.
 	 * @param linkCommand Reference to {@link module:link/linkcommand~LinkCommand}.
 	 */
-	constructor( locale: Locale, linkCommand: LinkCommand ) {
-		super( locale );
+	constructor(locale: Locale, linkCommand: LinkCommand) {
+		super(locale);
 
 		const t = locale.t;
 
 		this.textInputView = this._createTextInput();
 		this.urlInputView = this._createUrlInput();
-		this.saveButtonView = this._createButton( t( 'Save' ), icons.check, 'ck-button-save' );
+		this.saveButtonView = this._createButton(t('Save'), icons.check, 'ck-button-save');
 		this.saveButtonView.type = 'submit';
-		this.cancelButtonView = this._createButton( t( 'Cancel' ), icons.cancel, 'ck-button-cancel', 'cancel' );
-		this._manualDecoratorSwitches = this._createManualDecoratorSwitches( linkCommand );
-		this.children = this._createFormChildren( linkCommand.manualDecorators );
+		this.cancelButtonView = this._createButton(t('Cancel'), icons.cancel, 'ck-button-cancel', 'cancel');
+		this._manualDecoratorSwitches = this._createManualDecoratorSwitches(linkCommand);
+		this.children = this._createFormChildren(linkCommand.manualDecorators);
 
-		this._focusCycler = new FocusCycler( {
+		this._focusCycler = new FocusCycler({
 			focusables: this._focusables,
 			focusTracker: this.focusTracker,
 			keystrokeHandler: this.keystrokes,
@@ -125,15 +125,15 @@ export default class LinkFormView extends View {
 				// Navigate form fields forwards using the Tab key.
 				focusNext: 'tab'
 			}
-		} );
+		});
 
-		const classList = [ 'ck', 'ck-link-form', 'ck-responsive-form' ];
+		const classList = ['ck', 'ck-link-form', 'ck-responsive-form'];
 
-		if ( linkCommand.manualDecorators.length ) {
-			classList.push( 'ck-link-form_layout-vertical', 'ck-vertical-form' );
+		if (linkCommand.manualDecorators.length) {
+			classList.push('ck-link-form_layout-vertical', 'ck-vertical-form');
 		}
 
-		this.setTemplate( {
+		this.setTemplate({
 			tag: 'form',
 
 			attributes: {
@@ -144,7 +144,7 @@ export default class LinkFormView extends View {
 			},
 
 			children: this.children
-		} );
+		});
 	}
 
 	/**
@@ -156,11 +156,11 @@ export default class LinkFormView extends View {
 	 */
 	public getDecoratorSwitchesState(): Record<string, boolean> {
 		return Array
-			.from( this._manualDecoratorSwitches as Iterable<SwitchButtonView & { name: string }> )
-			.reduce( ( accumulator, switchButton ) => {
-				accumulator[ switchButton.name ] = switchButton.isOn;
+			.from(this._manualDecoratorSwitches as Iterable<SwitchButtonView & { name: string }>)
+			.reduce((accumulator, switchButton) => {
+				accumulator[switchButton.name] = switchButton.isOn;
 				return accumulator;
-			}, {} as Record<string, boolean> );
+			}, {} as Record<string, boolean>);
 	}
 
 	/**
@@ -169,9 +169,9 @@ export default class LinkFormView extends View {
 	public override render(): void {
 		super.render();
 
-		submitHandler( {
+		submitHandler({
 			view: this
-		} );
+		});
 
 		const childViews = [
 			this.textInputView,
@@ -181,16 +181,16 @@ export default class LinkFormView extends View {
 			this.cancelButtonView
 		];
 
-		childViews.forEach( v => {
+		childViews.forEach(v => {
 			// Register the view as focusable.
-			this._focusables.add( v );
+			this._focusables.add(v);
 
 			// Register the view in the focus tracker.
-			this.focusTracker.add( v.element! );
-		} );
+			this.focusTracker.add(v.element!);
+		});
 
 		// Start listening for the keystrokes coming from #element.
-		this.keystrokes.listenTo( this.element! );
+		this.keystrokes.listenTo(this.element!);
 	}
 
 	/**
@@ -217,7 +217,7 @@ export default class LinkFormView extends View {
 	 */
 	private _createTextInput(): LabeledFieldView<InputTextView> {
 		const t = this.locale!.t;
-		const labeledInput = new LabeledFieldView( this.locale, createLabeledInputText );
+		const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
 
 		labeledInput.label = 'Link Text';
 
@@ -231,9 +231,9 @@ export default class LinkFormView extends View {
 	 */
 	private _createUrlInput(): LabeledFieldView<InputTextView> {
 		const t = this.locale!.t;
-		const labeledInput = new LabeledFieldView( this.locale, createLabeledInputText );
+		const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
 
-		labeledInput.label = t( 'Link URL' );
+		labeledInput.label = t('Link URL');
 
 		return labeledInput;
 	}
@@ -247,23 +247,23 @@ export default class LinkFormView extends View {
 	 * @param eventName An event name that the `ButtonView#execute` event will be delegated to.
 	 * @returns The button view instance.
 	 */
-	private _createButton( label: string, icon: string, className: string, eventName?: string ): ButtonView {
-		const button = new ButtonView( this.locale );
+	private _createButton(label: string, icon: string, className: string, eventName?: string): ButtonView {
+		const button = new ButtonView(this.locale);
 
-		button.set( {
+		button.set({
 			label,
 			icon,
 			tooltip: true
-		} );
+		});
 
-		button.extendTemplate( {
+		button.extendTemplate({
 			attributes: {
 				class: className
 			}
-		} );
+		});
 
-		if ( eventName ) {
-			button.delegate( 'execute' ).to( this, eventName );
+		if (eventName) {
+			button.delegate('execute').to(this, eventName);
 		}
 
 		return button;
@@ -276,27 +276,27 @@ export default class LinkFormView extends View {
 	 * @param linkCommand A reference to the link command.
 	 * @returns ViewCollection of switch buttons.
 	 */
-	private _createManualDecoratorSwitches( linkCommand: LinkCommand ): ViewCollection<SwitchButtonView> {
+	private _createManualDecoratorSwitches(linkCommand: LinkCommand): ViewCollection<SwitchButtonView> {
 		const switches = this.createCollection<SwitchButtonView>();
 
-		for ( const manualDecorator of linkCommand.manualDecorators ) {
-			const switchButton: SwitchButtonView & { name?: string } = new SwitchButtonView( this.locale );
+		for (const manualDecorator of linkCommand.manualDecorators) {
+			const switchButton: SwitchButtonView & { name?: string } = new SwitchButtonView(this.locale);
 
-			switchButton.set( {
+			switchButton.set({
 				name: manualDecorator.id,
 				label: manualDecorator.label,
 				withText: true
-			} );
+			});
 
-			switchButton.bind( 'isOn' ).toMany( [ manualDecorator, linkCommand ], 'value', ( decoratorValue, commandValue ) => {
+			switchButton.bind('isOn').toMany([manualDecorator, linkCommand], 'value', (decoratorValue, commandValue) => {
 				return commandValue === undefined && decoratorValue === undefined ? !!manualDecorator.defaultValue : !!decoratorValue;
-			} );
+			});
 
-			switchButton.on( 'execute', () => {
-				manualDecorator.set( 'value', !switchButton.isOn );
-			} );
+			switchButton.on('execute', () => {
+				manualDecorator.set('value', !switchButton.isOn);
+			});
 
-			switches.add( switchButton );
+			switches.add(switchButton);
 		}
 
 		return switches;
@@ -313,27 +313,27 @@ export default class LinkFormView extends View {
 	 * the collection of manual decorators stored in the link command.
 	 * @returns The children of link form view.
 	 */
-	private _createFormChildren( manualDecorators: Collection<ManualDecorator> ): ViewCollection {
+	private _createFormChildren(manualDecorators: Collection<ManualDecorator>): ViewCollection {
 		const children = this.createCollection();
 
-		children.add( this.textInputView );
-		children.add( this.urlInputView );
+		children.add(this.textInputView);
+		children.add(this.urlInputView);
 
-		if ( manualDecorators.length ) {
+		if (manualDecorators.length) {
 			const additionalButtonsView = new View();
 
-			additionalButtonsView.setTemplate( {
+			additionalButtonsView.setTemplate({
 				tag: 'ul',
-				children: this._manualDecoratorSwitches.map( switchButton => ( {
+				children: this._manualDecoratorSwitches.map(switchButton => ({
 					tag: 'li',
-					children: [ switchButton ],
+					children: [switchButton],
 					attributes: {
 						class: [
 							'ck',
 							'ck-list__item'
 						]
 					}
-				} ) ),
+				})),
 				attributes: {
 					class: [
 						'ck',
@@ -341,12 +341,12 @@ export default class LinkFormView extends View {
 						'ck-list'
 					]
 				}
-			} );
-			children.add( additionalButtonsView );
+			});
+			children.add(additionalButtonsView);
 		}
 
-		children.add( this.saveButtonView );
-		children.add( this.cancelButtonView );
+		children.add(this.saveButtonView);
+		children.add(this.cancelButtonView);
 
 		return children;
 	}
