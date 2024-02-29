@@ -1,13 +1,13 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/utils/automaticdecorators
  */
-import { type ArrayOrItem } from 'ckeditor5/src/utils';
-import type { DowncastDispatcher } from 'ckeditor5/src/engine';
-import type { NormalizedLinkDecoratorAutomaticDefinition } from '../utils';
+import { type ArrayOrItem } from 'ckeditor5/src/utils.js';
+import type { DowncastDispatcher } from 'ckeditor5/src/engine.js';
+import type { NormalizedLinkDecoratorAutomaticDefinition } from '../utils.js';
 /**
  * Helper class that ties together all {@link module:link/linkconfig~LinkDecoratorAutomaticDefinition} and provides
  * the {@link module:engine/conversion/downcasthelpers~DowncastHelpers#attributeToElement downcast dispatchers} for them.

@@ -1,12 +1,13 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/autolink
  */
-import { Plugin } from 'ckeditor5/src/core';
-import { Delete } from 'ckeditor5/src/typing';
+import { Plugin } from 'ckeditor5/src/core.js';
+import { Delete } from 'ckeditor5/src/typing.js';
+import LinkEditing from './linkediting.js';
 /**
  * The autolink plugin.
  */
@@ -14,11 +15,11 @@ export default class AutoLink extends Plugin {
     /**
      * @inheritDoc
      */
-    static get requires(): readonly [typeof Delete];
+    static get requires(): readonly [typeof Delete, typeof LinkEditing];
     /**
      * @inheritDoc
      */
-    static get pluginName(): 'AutoLink';
+    static get pluginName(): "AutoLink";
     /**
      * @inheritDoc
      */
@@ -27,6 +28,20 @@ export default class AutoLink extends Plugin {
      * @inheritDoc
      */
     afterInit(): void;
+    /**
+     * For given position, returns a range that includes the whole link that contains the position.
+     *
+     * If position is not inside a link, returns `null`.
+     */
+    private _expandLinkRange;
+    /**
+     * Extends the document selection to includes all links that intersects with given `selectedRange`.
+     */
+    private _selectEntireLinks;
+    /**
+     * Enables autolinking on pasting a URL when some content is selected.
+     */
+    private _enablePasteLinking;
     /**
      * Enables autolinking on typing.
      */

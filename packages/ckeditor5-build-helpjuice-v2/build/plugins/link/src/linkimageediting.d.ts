@@ -1,12 +1,12 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/linkimageediting
  */
-import { Plugin } from 'ckeditor5/src/core';
-import LinkEditing from './linkediting';
+import { Plugin } from 'ckeditor5/src/core.js';
+import LinkEditing from './linkediting.js';
 /**
  * The link image engine feature.
  *
@@ -21,11 +21,11 @@ export default class LinkImageEditing extends Plugin {
     /**
      * @inheritDoc
      */
-    static get pluginName(): 'LinkImageEditing';
+    static get pluginName(): "LinkImageEditing";
     /**
      * @inheritDoc
      */
-    init(): void;
+    afterInit(): void;
     /**
      * Processes {@link module:link/linkconfig~LinkDecoratorAutomaticDefinition automatic decorators} definitions and
      * attaches proper converters that will work when linking an image.`

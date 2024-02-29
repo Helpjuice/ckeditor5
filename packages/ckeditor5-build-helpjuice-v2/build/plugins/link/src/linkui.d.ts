@@ -1,14 +1,14 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 /**
  * @module link/linkui
  */
-import { Plugin } from 'ckeditor5/src/core';
-import { ContextualBalloon, type ViewWithCssTransitionDisabler } from 'ckeditor5/src/ui';
-import LinkFormView from './ui/linkformview';
-import LinkActionsView from './ui/linkactionsview';
+import { Plugin } from 'ckeditor5/src/core.js';
+import { ContextualBalloon, type ViewWithCssTransitionDisabler } from 'ckeditor5/src/ui.js';
+import LinkFormView from './ui/linkformview.js';
+import LinkActionsView from './ui/linkactionsview.js';
 /**
  * The link UI plugin. It introduces the `'link'` and `'unlink'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
  *
@@ -35,7 +35,7 @@ export default class LinkUI extends Plugin {
     /**
      * @inheritDoc
      */
-    static get pluginName(): 'LinkUI';
+    static get pluginName(): "LinkUI";
     /**
      * @inheritDoc
      */

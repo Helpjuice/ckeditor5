@@ -1,10 +1,10 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
-import { Plugin } from 'ckeditor5/src/core';
-import LinkUI from './linkui';
-import LinkEditing from './linkediting';
+import { Plugin } from 'ckeditor5/src/core.js';
+import LinkUI from './linkui.js';
+import LinkEditing from './linkediting.js';
 /**
  * The link image UI plugin.
  *
@@ -19,7 +19,7 @@ export default class LinkImageUI extends Plugin {
     /**
      * @inheritDoc
      */
-    static get pluginName(): 'LinkImageUI';
+    static get pluginName(): "LinkImageUI";
     /**
      * @inheritDoc
      */
