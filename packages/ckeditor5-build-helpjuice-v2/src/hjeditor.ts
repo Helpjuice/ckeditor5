@@ -413,7 +413,16 @@ HelpjuiceEditor.defaultConfig = {
 						`<div style="position: relative; height: 0; padding-bottom: 56.2493%;"><iframe src="https://www.loom.com/embed/${videoId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe></div>`
 					);
 				}
-			}
+			},
+			{
+				name: 'wizardshotProvider',
+				url: /^https:\/\/www\.wizardshot\.com\/embed\/tutorials\/(\w+)/,
+				html: (match) => {
+					const tutorialId = match[1];
+
+					return `<iframe src="https://www.wizardshot.com/embed/tutorials/${tutorialId}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+				},
+			},
 		]
 	},
 	indentBlock: {
