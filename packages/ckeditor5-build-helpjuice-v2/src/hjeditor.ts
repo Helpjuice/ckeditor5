@@ -416,11 +416,11 @@ HelpjuiceEditor.defaultConfig = {
 			},
 			{
 				name: 'wizardshotProvider',
-				url: /^https:\/\/www\.wizardshot\.com\/embed\/tutorials\/(\w+)/,
+				url: /^https:\/\/www\.wizardshot\.com\/(embed\/)?tutorials\/(\w+)/,
 				html: (match) => {
-					const tutorialId = match[1];
+					const tutorialId = match[2] || match[1];
 
-					return `<iframe src="https://www.wizardshot.com/embed/tutorials/${tutorialId}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+					return `<div style="position: relative; height: 0; padding-bottom: 65%; pointer-events: unset; overflow: hidden"><iframe src="https://www.wizardshot.com/embed/tutorials/${tutorialId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; border-radius: 4px"></iframe></div>`;
 				},
 			},
 		]
