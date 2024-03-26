@@ -421,7 +421,7 @@ HelpjuiceEditor.defaultConfig = {
 					const tutorialId = match[2] || match[1];
 
 					return `
-					<div style="position: relative; height: 0; padding-bottom: 65%; pointer-events: unset;">
+					<div style="position: relative; height: 0; padding-bottom: 65%; pointer-events: unset;" data-iframe-id="${tutorialId}">
 					  <div class="ws-iframe-actions">
 					    <button type="button" id="edit-ws-tutorial" data-tutorial-id="${tutorialId}">Edit Tutorial</button>
 					    <button type="button" id="delete-ws-tutorial" data-tutorial-id="${tutorialId}"></button>
