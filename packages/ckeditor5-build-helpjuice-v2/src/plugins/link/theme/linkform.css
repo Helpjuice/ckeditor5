@@ -43,3 +43,13 @@
 		}
 	}
 }
+
+[dir=ltr] .ck.ck-responsive-form {
+	&>:nth-child(2n) {
+		margin-left: 0 !important;
+	}
+
+	&>:first-child {
+		margin-bottom: 15px;
+	}
+}

@@ -185,6 +185,8 @@ export default class LinkUI extends Plugin {
 
 		// Form elements should be read-only when corresponding commands are disabled.
 		formView.urlInputView.bind('isEnabled').to(linkCommand, 'isEnabled');
+		// TODO: CHECK IF THIS IS REALLY NECESSARY
+		formView.saveButtonView.bind( 'isEnabled' ).to( linkCommand );
 
 		// Disable the "save" button if the command is disabled or the input is empty despite being required.
 		formView.saveButtonView.bind('isEnabled').to(
