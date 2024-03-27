@@ -467,6 +467,12 @@ HelpjuiceEditor.defaultConfig = {
 		],
 		disallow: [
 			{
+				name: 'ul'
+			},
+			{
+				name: 'ol'
+			},
+			{
 				name: 'style'
 			}
 		]
