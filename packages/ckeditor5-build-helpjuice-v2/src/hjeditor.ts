@@ -420,7 +420,15 @@ HelpjuiceEditor.defaultConfig = {
 				html: (match) => {
 					const tutorialId = match[2] || match[1];
 
-					return `<div style="position: relative; height: 0; padding-bottom: 65%; pointer-events: unset; overflow: hidden"><iframe src="https://www.wizardshot.com/embed/tutorials/${tutorialId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; border-radius: 4px"></iframe></div>`;
+					return `
+					<div style="position: relative; height: 0; padding-bottom: 65%; pointer-events: unset;" data-iframe-id="${tutorialId}">
+					  <div class="ws-iframe-actions">
+					    <button type="button" id="edit-ws-tutorial" data-tutorial-id="${tutorialId}">Edit Tutorial</button>
+					    <button type="button" id="delete-ws-tutorial" data-tutorial-id="${tutorialId}"></button>
+				      </div>
+					  <iframe src="https://www.wizardshot.com/embed/tutorials/${tutorialId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; border-radius: 4px"></iframe>
+					</div>
+					`;
 				},
 			},
 		]

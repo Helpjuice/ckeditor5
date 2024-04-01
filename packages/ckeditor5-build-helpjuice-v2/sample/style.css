@@ -118,3 +118,60 @@ html {
 .ck.ck-character-grid .ck-character-grid__tile {
 	font-size: 16px !important;
 }
+
+.ws-iframe-actions {
+	display: flex;
+	gap: 8px;
+	padding: 4px 8px;
+	background: #03132e;
+	position: absolute;
+	top: -20px;
+	right: 20px;
+	z-index: 5;
+	border-radius: 4px;
+}
+
+.ws-iframe-actions button {
+    all: unset;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.ws-iframe-actions button:hover {
+	background: #1f2d3d;
+}
+
+.ws-iframe-actions button:first-child::after {
+	content: "";
+	position: absolute;
+	height: 75%;
+	width: 1px;
+	background-color: rgba(255, 255, 255, 0.33);
+	right: -4px;
+}
+
+
+.ws-iframe-actions button::before {
+	content: "";
+	background-size: 100%;
+	background-repeat: no-repeat;
+	width: 20px;
+	height: 20px;
+}
+
+.ws-iframe-actions button:first-child::before {
+	background-image: url("https://static.helpjuice.com/helpjuice_production/uploads/upload/image/1885/3931502/edit-ws.svg");
+}
+
+.ws-iframe-actions button:last-child::before {
+	background-image: url("https://static.helpjuice.com/helpjuice_production/uploads/upload/image/1885/3931503/remove-ws.svg");
+}
