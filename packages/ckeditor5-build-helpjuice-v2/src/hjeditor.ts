@@ -482,6 +482,9 @@ HelpjuiceEditor.defaultConfig = {
 			},
 			{
 				name: 'style'
+			},
+			{
+				name: 'script'
 			}
 		]
 	},
