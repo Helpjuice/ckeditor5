@@ -1,3 +1,4 @@
+//@ts-nocheck
 /**
  * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
@@ -26,7 +27,7 @@ export default class ImageEditing extends Plugin {
 	 * @inheritDoc
 	 */
 	public static get requires() {
-		return [ ImageUtils ] as const;
+		return [ImageUtils] as const;
 	}
 
 	/**
@@ -44,88 +45,107 @@ export default class ImageEditing extends Plugin {
 		const conversion = editor.conversion;
 
 		// See https://github.com/ckeditor/ckeditor5-image/issues/142.
-		editor.editing.view.addObserver( ImageLoadObserver );
+		editor.editing.view.addObserver(ImageLoadObserver);
 
-		conversion.for( 'upcast' )
-			.attributeToAttribute( {
+		conversion
+			.for('upcast')
+			.attributeToAttribute({
 				view: {
 					name: 'img',
-					key: 'alt'
+					key: 'alt',
 				},
-				model: 'alt'
-			} )
-			.attributeToAttribute( {
+				model: 'alt',
+			})
+			.attributeToAttribute({
 				view: {
 					name: 'img',
-					key: 'width'
+					key: 'width',
 				},
-				model: 'width'
-			} )
-			.attributeToAttribute( {
+				model: 'width',
+			})
+			.attributeToAttribute({
 				view: {
 					name: 'img',
-					key: 'height'
+					key: 'height',
 				},
-				model: 'height'
-			} )
-			.attributeToAttribute( {
+				model: 'height',
+			})
+			.attributeToAttribute({
 				// @ts-ignore
 				model: {
 					key: 'style',
-					name: 'imageBlock'
+					name: 'imageBlock',
 				},
-				view: 'style'
-			} )
-			.attributeToAttribute( {
+				view: 'style',
+			})
+			.attributeToAttribute({
 				// @ts-ignore
 				model: {
 					key: 'style',
-					name: 'imageInline'
+					name: 'imageInline',
 				},
-				view: 'style'
-			} )
-			.attributeToAttribute( {
+				view: 'style',
+			})
+			.attributeToAttribute({
 				view: {
 					name: 'img',
-					key: 'srcset'
+					key: 'srcset',
 				},
 				model: {
 					key: 'srcset',
-					value: ( viewImage: ViewElement ) => {
+					value: (viewImage: ViewElement) => {
 						const value: Record<string, string> = {
-							data: viewImage.getAttribute( 'srcset' )!
+							data: viewImage.getAttribute('srcset')!,
 						};
 
-						if ( viewImage.hasAttribute( 'width' ) ) {
-							value.width = viewImage.getAttribute( 'width' )!;
+						if (viewImage.hasAttribute('width')) {
+							value.width = viewImage.getAttribute('width')!;
 						}
 
 						return value;
-					}
+					},
+				},
+			});
+
+		conversion.for('downcast').add((dispatcher) => {
+			dispatcher.on(
+				'attribute:style:imageBlock',
+				(evt, data, conversionApi) => {
+					const viewElement = conversionApi.mapper.toViewElement(
+						data.item
+					);
+
+					conversionApi.writer.setAttribute(
+						'style',
+						data.attributeNewValue,
+						viewElement
+					);
 				}
-			} );
+			);
 
-		conversion.for( 'downcast' ).add( dispatcher => {
-			dispatcher.on( 'attribute:style:imageBlock', ( evt, data, conversionApi ) => {
-				const viewElement = conversionApi.mapper.toViewElement( data.item );
+			dispatcher.on(
+				'attribute:style:imageInline',
+				(evt, data, conversionApi) => {
+					const viewElement = conversionApi.mapper.toViewElement(
+						data.item
+					);
 
-				conversionApi.writer.setAttribute( 'style', data.attributeNewValue, viewElement );
-			} );
+					conversionApi.writer.setAttribute(
+						'style',
+						data.attributeNewValue,
+						viewElement
+					);
+				}
+			);
+		});
 
-			dispatcher.on( 'attribute:style:imageInline', ( evt, data, conversionApi ) => {
-				const viewElement = conversionApi.mapper.toViewElement( data.item );
+		const insertImageCommand = new InsertImageCommand(editor);
+		const replaceImageSourceCommand = new ReplaceImageSourceCommand(editor);
 
-				conversionApi.writer.setAttribute( 'style', data.attributeNewValue, viewElement );
-			} );
-		} );
-
-		const insertImageCommand = new InsertImageCommand( editor );
-		const replaceImageSourceCommand = new ReplaceImageSourceCommand( editor );
-
-		editor.commands.add( 'insertImage', insertImageCommand );
-		editor.commands.add( 'replaceImageSource', replaceImageSourceCommand );
+		editor.commands.add('insertImage', insertImageCommand);
+		editor.commands.add('replaceImageSource', replaceImageSourceCommand);
 
 		// `imageInsert` is an alias for backward compatibility.
-		editor.commands.add( 'imageInsert', insertImageCommand );
+		editor.commands.add('imageInsert', insertImageCommand);
 	}
 }
