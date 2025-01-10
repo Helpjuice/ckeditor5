@@ -1,18 +1,26 @@
+//@ts-check
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 // The editor creator to use.
-import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-import { icons } from 'ckeditor5/src/core';
+import { ClassicEditor as ClassicEditorBase } from '@ckeditor/ckeditor5-editor-classic';
+import { icons } from 'ckeditor5/src/core.js';
 
 import { Essentials } from '@ckeditor/ckeditor5-essentials';
-import { UploadAdapter } from '@ckeditor/ckeditor5-adapter-ckfinder';
+import { CKFinderUploadAdapter } from '@ckeditor/ckeditor5-adapter-ckfinder';
 import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
 import AutoSave from '@ckeditor/ckeditor5-autosave/src/autosave';
-import { Bold, Underline, Italic, Strikethrough, Subscript, Superscript } from '@ckeditor/ckeditor5-basic-styles';
+import {
+	Bold,
+	Underline,
+	Italic,
+	Strikethrough,
+	Subscript,
+	Superscript,
+} from '@ckeditor/ckeditor5-basic-styles';
 import { GeneralHtmlSupport } from '@ckeditor/ckeditor5-html-support';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
 import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line';
@@ -20,53 +28,77 @@ import { Indent, IndentBlock } from '@ckeditor/ckeditor5-indent';
 import { List, ListProperties, TodoList } from '@ckeditor/ckeditor5-list';
 import { FindAndReplace } from '@ckeditor/ckeditor5-find-and-replace';
 import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
-import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
+import { Paragraph } from 'ckeditor5/src/paragraph.js';
 import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
-import { Table, TableCaption, TableToolbar, TableProperties, TableCellProperties, TableColumnResize } from '@ckeditor/ckeditor5-table';
-import { TextTransformation } from '@ckeditor/ckeditor5-typing';
+import {
+	Table,
+	TableCaption,
+	TableToolbar,
+	TableProperties,
+	TableCellProperties,
+	TableColumnResize,
+} from '@ckeditor/ckeditor5-table';
+import { TextTransformation } from 'ckeditor5/src/typing';
 import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
 import { Highlight } from '@ckeditor/ckeditor5-highlight';
 import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed';
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
 import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
 import { Style } from '@ckeditor/ckeditor5-style';
-import { SpecialCharacters, SpecialCharactersArrows, SpecialCharactersMathematical, SpecialCharactersText, SpecialCharactersEssentials, SpecialCharactersLatin } from '@ckeditor/ckeditor5-special-characters';
+import {
+	SpecialCharacters,
+	SpecialCharactersArrows,
+	SpecialCharactersMathematical,
+	SpecialCharactersText,
+	SpecialCharactersEssentials,
+	SpecialCharactersLatin,
+} from '@ckeditor/ckeditor5-special-characters';
 
 // Image Plugin
-import { ImageStyle, ImageResize, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
-import CustomImage from './plugins/image/image';
-import ImageCaption from './plugins/image/imagecaption';
+import {
+	ImageStyle,
+	ImageResize,
+	ImageToolbar,
+	ImageUpload,
+} from '@ckeditor/ckeditor5-image';
+import CustomImage from './plugins/image/image.js';
+import ImageCaption from './plugins/image/imagecaption.js';
 
 // Custom Plugins
-import Heading from './plugins/heading/src/heading';
-import Accordion from './plugins/accordion/accordion';
-import Tab from './plugins/tab/tab';
-import CalloutBlocks from './plugins/calloutblocks/calloutblocks';
-import ExtraFormatting from './plugins/extraformatting/extraformatting';
-import InternalBlock from './plugins/internalblock/internalblock';
-import DecisionTree from './plugins/decisiontree/decisiontree';
-import InsertArticle from './plugins/insertarticle/insertarticle';
-import FilesManager from './plugins/filesmanager/filesmanager';
-import Mention from './plugins/mention/src/mention';
-import Comments from './plugins/comments/comments';
-import Glossary from './plugins/glossary/glossary';
-import CmdDelete from './plugins/cmddelete/cmddelete';
-import { FontFamily, FontSize, FontColor, FontBackgroundColor } from './plugins/font';
-import { Link, LinkImage } from './plugins/link';
+import Heading from './plugins/heading/src/heading.js';
+import Accordion from './plugins/accordion/accordion.js';
+import Tab from './plugins/tab/tab.js';
+import CalloutBlocks from './plugins/calloutblocks/calloutblocks.js';
+import ExtraFormatting from './plugins/extraformatting/extraformatting.js';
+import InternalBlock from './plugins/internalblock/internalblock.js';
+import DecisionTree from './plugins/decisiontree/decisiontree.js';
+import InsertArticle from './plugins/insertarticle/insertarticle.js';
+import FilesManager from './plugins/filesmanager/filesmanager.js';
+import Mention from './plugins/mention/src/mention.js';
+import Comments from './plugins/comments/comments.js';
+import Glossary from './plugins/glossary/glossary.js';
+import CmdDelete from './plugins/cmddelete/cmddelete.js';
+import FontFamily from './plugins/font/src/fontfamily.js';
+import FontSize from './plugins/font/src/fontsize.js';
+import FontColor from './plugins/font/src/fontcolor.js';
+import FontBackgroundColor from './plugins/font/src/fontbackgroundcolor.js';
+import Link from './plugins/link/src/link.js';
+import LinkImage from './plugins/link/src/linkimage.js';
 
-import EmbeddedIFrame from './plugins/embeddediframe/embeddediframe';
-import InlineCode from './plugins/inlinecode/inlinecode';
+import EmbeddedIFrame from './plugins/embeddediframe/embeddediframe.js';
+import InlineCode from './plugins/inlinecode/inlinecode.js';
 
 const { objectInline, objectLeft, objectRight, objectCenter } = icons;
 
-const VIDEO_EXTENSIONS_REGEX = 'mpg|mp4|wmv|mpeg|webm|mkv|flv|vob|ogv|ogg|avi|rm|rmvb|asf|amv|mp2|mpe|mpv|m4v|svi|3gp|mov';
+const VIDEO_EXTENSIONS_REGEX =
+	'mpg|mp4|wmv|mpeg|webm|mkv|flv|vob|ogv|ogg|avi|rm|rmvb|asf|amv|mp2|mpe|mpv|m4v|svi|3gp|mov';
 
-export default class HelpjuiceEditor extends ClassicEditorBase { }
+export default class HelpjuiceEditor extends ClassicEditorBase {}
 
 // Plugins to include in the build.
 HelpjuiceEditor.builtinPlugins = [
 	Essentials,
-	UploadAdapter,
+	CKFinderUploadAdapter,
 	Alignment,
 	Autoformat,
 	AutoSave,
@@ -81,7 +113,6 @@ HelpjuiceEditor.builtinPlugins = [
 	Highlight,
 	BlockQuote,
 	HorizontalLine,
-	// @ts-ignore
 	Heading,
 	CustomImage,
 	ImageCaption,
@@ -118,7 +149,6 @@ HelpjuiceEditor.builtinPlugins = [
 	DecisionTree,
 	InsertArticle,
 	FilesManager,
-	// @ts-ignore
 	Mention,
 	AllowHTMLAttributesToBeRemoved,
 	Style,
@@ -137,18 +167,22 @@ HelpjuiceEditor.builtinPlugins = [
 	SpecialCharactersMathematical,
 	SpecialCharactersText,
 	SpecialCharactersEssentials,
-	SpecialCharactersLatin
+	SpecialCharactersLatin,
 ];
 
-function AllowHTMLAttributesToBeRemoved( editor: any ) {
-	editor.model.schema.setAttributeProperties( 'htmlAttributes', { isFormatting: true } );
+function AllowHTMLAttributesToBeRemoved(editor: any) {
+	editor.model.schema.setAttributeProperties('htmlAttributes', {
+		isFormatting: true,
+	});
 
 	// allow removing html attributes from <a> tags
-	editor.model.schema.setAttributeProperties( 'htmlA', { isFormatting: true } );
+	editor.model.schema.setAttributeProperties('htmlA', { isFormatting: true });
 }
 
-function SpecialCharactersEmoji( editor: any ) {
-    editor.plugins.get( 'SpecialCharacters' ).addItems( 'Emoji', [
+function SpecialCharactersEmoji(editor: any) {
+	editor.plugins.get('SpecialCharacters').addItems(
+		'Emoji',
+		[
 			{ title: 'smiley face', character: '😊' },
 			{ title: 'Grinning Face', character: '😀' },
 			{ title: 'Face with Tears of Joy', character: '😂' },
@@ -188,8 +222,10 @@ function SpecialCharactersEmoji( editor: any ) {
 			{ title: 'Unicorn', character: '🦄' },
 			{ title: 'Alien', character: '👽' },
 			{ title: 'Ghost', character: '👻' },
-			{ title: 'Skull', character: '💀' }
-		], { label: 'Emojis' });
+			{ title: 'Skull', character: '💀' },
+		],
+		{ label: 'Emojis' }
+	);
 }
 
 const colorPalette = [
@@ -246,15 +282,39 @@ const colorPalette = [
 
 // Editor configuration.
 HelpjuiceEditor.defaultConfig = {
-	placeholder: "Type Your Content Here!",
+	placeholder: 'Type Your Content Here!',
 	heading: {
 		options: [
-			{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-			{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-			{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-			{ model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-			{ model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' }
-		]
+			{
+				model: 'paragraph',
+				title: 'Paragraph',
+				class: 'ck-heading_paragraph',
+			},
+			{
+				model: 'heading1',
+				view: 'h1',
+				title: 'Heading 1',
+				class: 'ck-heading_heading1',
+			},
+			{
+				model: 'heading2',
+				view: 'h2',
+				title: 'Heading 2',
+				class: 'ck-heading_heading2',
+			},
+			{
+				model: 'heading3',
+				view: 'h3',
+				title: 'Heading 3',
+				class: 'ck-heading_heading3',
+			},
+			{
+				model: 'heading4',
+				view: 'h4',
+				title: 'Heading 4',
+				class: 'ck-heading_heading4',
+			},
+		],
 	},
 	fontFamily: {
 		options: [
@@ -266,36 +326,28 @@ HelpjuiceEditor.defaultConfig = {
 			'Times New Roman, Times, serif',
 			'Trebuchet MS, Helvetica, sans-serif',
 			'Verdana, Geneva, sans-serif',
-			'Open Sans, sans-serif'
-		]
+			'Open Sans, sans-serif',
+		],
 	},
 	fontSize: {
-		options: [
-			12,
-			14,
-			16,
-			18,
-			20,
-			24,
-			30,
-			36,
-			48,
-			60,
-			72,
-			92
-		]
+		options: [12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 92],
 	},
 	fontColor: {
 		colors: colorPalette,
-		columns: 7
+		columns: 7,
 	},
 	fontBackgroundColor: {
 		colors: colorPalette,
-		columns: 7
+		columns: 7,
 	},
 	table: {
 		contentToolbar: [
-			'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'
+			'tableColumn',
+			'tableRow',
+			'mergeTableCells',
+			'tableProperties',
+			'tableCellProperties',
+			'toggleTableCaption',
 		],
 
 		// Configuration of the TableProperties plugin.
@@ -306,7 +358,7 @@ HelpjuiceEditor.defaultConfig = {
 		// Configuration of the TableCellProperties plugin.
 		tableCellProperties: {
 			// ...
-		}
+		},
 	},
 	image: {
 		resizeUnit: 'px',
@@ -316,38 +368,38 @@ HelpjuiceEditor.defaultConfig = {
 					name: 'inline',
 					title: 'In line',
 					icon: objectInline,
-					modelElements: [ 'imageInline' ],
-					isDefault: true
+					modelElements: ['imageInline'],
+					isDefault: true,
 				},
 				{
 					name: 'block',
 					title: 'Centered image',
 					icon: objectCenter,
-					modelElements: [ 'imageBlock' ],
-					isDefault: true
+					modelElements: ['imageBlock'],
+					isDefault: true,
 				},
 				{
 					name: 'side',
 					title: 'Side image',
 					icon: objectRight,
-					modelElements: [ 'imageBlock' ],
-					className: 'image-style-side'
+					modelElements: ['imageBlock'],
+					className: 'image-style-side',
 				},
 				{
 					name: 'alignLeft',
 					title: 'Left aligned image',
 					icon: objectLeft,
-					modelElements: [ 'imageBlock', 'imageInline' ],
-					className: 'image-style-align-left'
+					modelElements: ['imageBlock', 'imageInline'],
+					className: 'image-style-align-left',
 				},
 				{
 					name: 'alignRight',
 					title: 'Right aligned image',
 					icon: objectRight,
-					modelElements: [ 'imageBlock', 'imageInline' ],
-					className: 'image-style-align-right'
-				}
-			]
+					modelElements: ['imageBlock', 'imageInline'],
+					className: 'image-style-align-right',
+				},
+			],
 		},
 		toolbar: [
 			'imageStyle:inline',
@@ -362,8 +414,17 @@ HelpjuiceEditor.defaultConfig = {
 			'imageTextAlternative',
 		],
 		upload: {
-			types: [ 'jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff', 'svg+xml', 'x-icon' ]
-		}
+			types: [
+				'jpeg',
+				'png',
+				'gif',
+				'bmp',
+				'webp',
+				'tiff',
+				'svg+xml',
+				'x-icon',
+			],
+		},
 	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: 'en',
@@ -372,47 +433,43 @@ HelpjuiceEditor.defaultConfig = {
 		extraProviders: [
 			{
 				name: 'helpjuiceProvider',
-				url: new RegExp(`^static.helpjuice\\.com\\/(\\w+)\\.(${VIDEO_EXTENSIONS_REGEX})`),
-				html: match => {
+				url: new RegExp(
+					`^static.helpjuice\\.com\\/(\\w+)\\.(${VIDEO_EXTENSIONS_REGEX})`
+				),
+				html: (match) => {
 					const getUrl = match.input;
 
-					return (
-						`<video controls="" style="max-width: 100%" src="https://${getUrl}">Your browser does not support HTML5 video.</video>`
-					);
-				}
+					return `<video controls="" style="max-width: 100%" src="https://${getUrl}">Your browser does not support HTML5 video.</video>`;
+				},
 			},
 			{
 				name: 'localProvider',
-				url: new RegExp(`.*uploads\\/upload\\/(\\w+)\\.(${VIDEO_EXTENSIONS_REGEX})`),
-				html: match => {
+				url: new RegExp(
+					`.*uploads\\/upload\\/(\\w+)\\.(${VIDEO_EXTENSIONS_REGEX})`
+				),
+				html: (match) => {
 					const getUrl = match.input;
 
-					return (
-						`<video controls="" style="max-width: 100%" src="${getUrl}">Your browser does not support HTML5 video.</video>`
-					);
-				}
+					return `<video controls="" style="max-width: 100%" src="${getUrl}">Your browser does not support HTML5 video.</video>`;
+				},
 			},
 			{
 				name: 'externalProvider',
 				url: new RegExp(`.*\\.(${VIDEO_EXTENSIONS_REGEX})`, 'i'),
-				html: match => {
+				html: (match) => {
 					const getUrl = match.input;
 
-					return (
-						`<video controls="" style="max-width: 100%" src="${getUrl}">Your browser does not support HTML5 video.</video>`
-					);
-				}
+					return `<video controls="" style="max-width: 100%" src="${getUrl}">Your browser does not support HTML5 video.</video>`;
+				},
 			},
 			{
 				name: 'loomProvider',
 				url: /^https:\/\/www\.loom\.com\/share\/(\w+)/,
-				html: match => {
-					const videoId = match[ 1 ];
+				html: (match) => {
+					const videoId = match[1];
 
-					return (
-						`<div style="position: relative; height: 0; padding-bottom: 56.2493%;"><iframe src="https://www.loom.com/embed/${videoId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe></div>`
-					);
-				}
+					return `<div style="position: relative; height: 0; padding-bottom: 56.2493%;"><iframe src="https://www.loom.com/embed/${videoId}" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe></div>`;
+				},
 			},
 			{
 				name: 'wizardshotProvider',
@@ -431,11 +488,11 @@ HelpjuiceEditor.defaultConfig = {
 					`;
 				},
 			},
-		]
+		],
 	},
 	indentBlock: {
 		offset: 1,
-		unit: 'em'
+		unit: 'em',
 	},
 	htmlSupport: {
 		allow: [
@@ -463,30 +520,30 @@ HelpjuiceEditor.defaultConfig = {
 					preload: true,
 					name: true,
 					type: true,
-					align: true
-				}
+					align: true,
+				},
 			},
 			{
 				name: /.*/,
 				classes: true,
 				styles: true,
-				attributes: true
-			}
+				attributes: true,
+			},
 		],
 		disallow: [
 			{
-				name: 'ul'
+				name: 'ul',
 			},
 			{
-				name: 'ol'
+				name: 'ol',
 			},
 			{
-				name: 'style'
+				name: 'style',
 			},
 			{
-				name: 'script'
-			}
-		]
+				name: 'script',
+			},
+		],
 	},
 	link: {
 		decorators: {
@@ -494,8 +551,8 @@ HelpjuiceEditor.defaultConfig = {
 				mode: 'manual',
 				label: 'Downloadable',
 				attributes: {
-					download: 'file'
-				}
+					download: 'file',
+				},
 			},
 			openInNewTab: {
 				mode: 'manual',
@@ -503,46 +560,46 @@ HelpjuiceEditor.defaultConfig = {
 				defaultValue: false,
 				attributes: {
 					target: '_blank',
-					rel: 'noopener noreferrer'
-				}
+					rel: 'noopener noreferrer',
+				},
 			},
 			buttonLink: {
 				mode: 'manual',
 				label: 'Style as Button',
 				defaultValue: false,
-				classes: 'link-button'
-			}
-		}
+				classes: 'link-button',
+			},
+		},
 	},
 	htmlEmbed: {
 		showPreviews: true,
-		sanitizeHtml: ( html: string ) => {
+		sanitizeHtml: (html: string) => {
 			return { html, hasChanged: false };
-		}
+		},
 	},
 	style: {
 		definitions: [
 			{
-				name: "Disable Text Selecting",
-				element: "span",
-				classes: ["hj-unselectable"]
+				name: 'Disable Text Selecting',
+				element: 'span',
+				classes: ['hj-unselectable'],
 			},
 			{
-				name: "Bordered",
-				element: "span",
-				classes: ["fr-text-bordered"]
+				name: 'Bordered',
+				element: 'span',
+				classes: ['fr-text-bordered'],
 			},
 			{
-				name: "Spaced",
-				element: "span",
-				classes: ["fr-text-spaced"]
+				name: 'Spaced',
+				element: 'span',
+				classes: ['fr-text-spaced'],
 			},
 			{
-				name: "Uppercase",
-				element: "span",
-				classes: ["fr-text-uppercase"]
-			}
-		]
+				name: 'Uppercase',
+				element: 'span',
+				classes: ['fr-text-uppercase'],
+			},
+		],
 	},
 	toolbar: {
 		items: [
@@ -591,22 +648,30 @@ HelpjuiceEditor.defaultConfig = {
 			'|',
 			'sourceEditing',
 			'findAndReplace',
-			'removeFormat'
+			'removeFormat',
 		],
-		shouldNotGroupWhenFull: true
+		shouldNotGroupWhenFull: true,
 	},
 	list: {
 		properties: {
 			styles: true,
 			startIndex: true,
-			reversed: true
-		}
+			reversed: true,
+		},
 	},
 	codeBlock: {
 		languages: [
-			{ language: 'plaintext', label: 'Plain text', class: 'language-plain' }, // The default language.
+			{
+				language: 'plaintext',
+				label: 'Plain text',
+				class: 'language-plain',
+			}, // The default language.
 			{ language: 'c', label: 'C', class: 'language-c' },
-			{ language: 'coffeescript', label: 'Coffeescript', class: 'language-coffeescript' },
+			{
+				language: 'coffeescript',
+				label: 'Coffeescript',
+				class: 'language-coffeescript',
+			},
 			{ language: 'cs', label: 'C#', class: 'language-cs' },
 			{ language: 'cpp', label: 'C++', class: 'language-cpp' },
 			{ language: 'css', label: 'CSS', class: 'language-css' },
@@ -614,16 +679,28 @@ HelpjuiceEditor.defaultConfig = {
 			{ language: 'go', label: 'Go', class: 'language-go' },
 			{ language: 'html', label: 'HTML', class: 'language-html' },
 			{ language: 'java', label: 'Java', class: 'language-java' },
-			{ language: 'javascript', label: 'JavaScript', class: 'language-javascript' },
+			{
+				language: 'javascript',
+				label: 'JavaScript',
+				class: 'language-javascript',
+			},
 			{ language: 'json', label: 'JSON', class: 'language-json' },
 			{ language: 'lua', label: 'LUA', class: 'language-lua' },
-			{ language: 'markdown', label: 'Markdown', class: 'language-markdown' },
+			{
+				language: 'markdown',
+				label: 'Markdown',
+				class: 'language-markdown',
+			},
 			{ language: 'php', label: 'PHP', class: 'language-php' },
 			{ language: 'python', label: 'Python', class: 'language-python' },
 			{ language: 'ruby', label: 'Ruby', class: 'language-ruby' },
 			{ language: 'sql', label: 'SQL', class: 'language-sql' },
-			{ language: 'typescript', label: 'TypeScript', class: 'language-typescript' },
-			{ language: 'xml', label: 'XML', class: 'language-xml' }
-		]
-	}
+			{
+				language: 'typescript',
+				label: 'TypeScript',
+				class: 'language-typescript',
+			},
+			{ language: 'xml', label: 'XML', class: 'language-xml' },
+		],
+	},
 };
