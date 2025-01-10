@@ -1,17 +1,18 @@
+//@ts-nocheck
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module link/unlinkcommand
  */
 
-import { Command } from 'ckeditor5/src/core';
-import { findAttributeRange } from 'ckeditor5/src/typing';
+import { Command } from 'ckeditor5/src/core.js';
+import { findAttributeRange } from 'ckeditor5/src/typing.js';
 
-import type LinkCommand from './linkcommand';
-import { isLinkableElement } from './utils';
+import type LinkCommand from './linkcommand.js';
+import { isLinkableElement } from './utils.js';
 
 /**
  * The unlink command. It is used by the {@link module:link/link~Link link plugin}.
@@ -27,10 +28,16 @@ export default class UnlinkCommand extends Command {
 
 		// A check for any integration that allows linking elements (e.g. `LinkImage`).
 		// Currently the selection reads attributes from text nodes only. See #7429 and #7465.
-		if ( isLinkableElement( selectedElement, model.schema ) ) {
-			this.isEnabled = model.schema.checkAttribute( selectedElement, 'linkHref' );
+		if (isLinkableElement(selectedElement, model.schema)) {
+			this.isEnabled = model.schema.checkAttribute(
+				selectedElement,
+				'linkHref'
+			);
 		} else {
-			this.isEnabled = model.schema.checkAttributeInSelection( selection, 'linkHref' );
+			this.isEnabled = model.schema.checkAttributeInSelection(
+				selection,
+				'linkHref'
+			);
 		}
 	}
 
@@ -51,29 +58,35 @@ export default class UnlinkCommand extends Command {
 		const editor = this.editor;
 		const model = this.editor.model;
 		const selection = model.document.selection;
-		const linkCommand: LinkCommand | undefined = editor.commands.get( 'link' );
+		const linkCommand: LinkCommand | undefined =
+			editor.commands.get('link');
 
-		model.change( writer => {
+		model.change((writer) => {
 			// Get ranges to unlink.
-			const rangesToUnlink = selection.isCollapsed ?
-				[ findAttributeRange(
-					selection.getFirstPosition()!,
-					'linkHref',
-					selection.getAttribute( 'linkHref' ),
-					model
-				) ] :
-				model.schema.getValidRanges( selection.getRanges(), 'linkHref' );
+			const rangesToUnlink = selection.isCollapsed
+				? [
+						findAttributeRange(
+							selection.getFirstPosition()!,
+							'linkHref',
+							selection.getAttribute('linkHref'),
+							model
+						),
+				  ]
+				: model.schema.getValidRanges(
+						selection.getRanges(),
+						'linkHref'
+				  );
 
 			// Remove `linkHref` attribute from specified ranges.
-			for ( const range of rangesToUnlink ) {
-				writer.removeAttribute( 'linkHref', range );
+			for (const range of rangesToUnlink) {
+				writer.removeAttribute('linkHref', range);
 				// If there are registered custom attributes, then remove them during unlink.
-				if ( linkCommand ) {
-					for ( const manualDecorator of linkCommand.manualDecorators ) {
-						writer.removeAttribute( manualDecorator.id, range );
+				if (linkCommand) {
+					for (const manualDecorator of linkCommand.manualDecorators) {
+						writer.removeAttribute(manualDecorator.id, range);
 					}
 				}
 			}
-		} );
+		});
 	}
 }

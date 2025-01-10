@@ -1,26 +1,31 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module font/fontsize/fontsizeui
  */
-import { Plugin } from 'ckeditor5/src/core';
+
+import { Plugin } from 'ckeditor5/src/core.js';
 import {
-	Model,
+	ViewModel,
 	createDropdown,
 	addListToDropdown,
-	type ListDropdownItemDefinition
-} from 'ckeditor5/src/ui';
-import { Collection } from 'ckeditor5/src/utils';
+	type ListDropdownButtonDefinition,
+	MenuBarMenuView,
+	MenuBarMenuListView,
+	MenuBarMenuListItemView,
+	MenuBarMenuListItemButtonView
+} from 'ckeditor5/src/ui.js';
+import { Collection } from 'ckeditor5/src/utils.js';
 
-import { normalizeOptions } from './utils';
-import { FONT_SIZE } from '../utils';
+import { normalizeOptions } from './utils.js';
+import { FONT_SIZE } from '../utils.js';
 
 import '../../theme/fontsize.css';
-import type { FontSizeOption } from '../fontconfig';
-import type FontSizeCommand from './fontsizecommand';
+import type { FontSizeOption } from '../fontconfig.js';
+import type FontSizeCommand from './fontsizecommand.js';
 
 import fontSizeIcon from '../../theme/icons/font-size.svg';
 
@@ -31,8 +36,15 @@ export default class FontSizeUI extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
-	public static get pluginName(): 'FontSizeUI' {
-		return 'FontSizeUI';
+	public static get pluginName() {
+		return 'FontSizeUI' as const;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static override get isOfficialPlugin(): true {
+		return true;
 	}
 
 	/**
@@ -47,11 +59,13 @@ export default class FontSizeUI extends Plugin {
 		const command: FontSizeCommand = editor.commands.get( FONT_SIZE )!;
 		const accessibleLabel = t( 'Font Size' );
 
+		const listOptions = _prepareListOptions( options, command );
+
 		// Register UI component.
 		editor.ui.componentFactory.add( FONT_SIZE, locale => {
 			const dropdownView = createDropdown( locale );
 
-			addListToDropdown( dropdownView, () => _prepareListOptions( options, command ), {
+			addListToDropdown( dropdownView, listOptions, {
 				role: 'menu',
 				ariaLabel: accessibleLabel
 			} );
@@ -77,23 +91,50 @@ export default class FontSizeUI extends Plugin {
 			this.listenTo( dropdownView, 'execute', evt => {
 				editor.execute( ( evt.source as any ).commandName, { value: ( evt.source as any ).commandParam } );
 				editor.editing.view.focus();
-			});
-
-			// Show label on dropdown's button.
-			dropdownView.buttonView.set( 'withText', true );
-
-			// Hide the icon.
-			// @ts-ignore
-			dropdownView.buttonView.set( 'icon', false );
-
-			// Bind dropdown's button label to fontSize value.
-			dropdownView.buttonView.bind( 'label' ).to( command, 'value', value => {
-				// If no value is set on the command show default size.
-				// Use t() method to make that string translatable.
-				return value ? value : t( '16px' );
 			} );
 
 			return dropdownView;
+		} );
+
+		editor.ui.componentFactory.add( `menuBar:${ FONT_SIZE }`, locale => {
+			const menuView = new MenuBarMenuView( locale );
+
+			menuView.buttonView.set( {
+				label: accessibleLabel,
+				icon: fontSizeIcon
+			} );
+
+			menuView.bind( 'isEnabled' ).to( command );
+
+			const listView = new MenuBarMenuListView( locale );
+
+			for ( const definition of listOptions ) {
+				const listItemView = new MenuBarMenuListItemView( locale, menuView );
+				const buttonView = new MenuBarMenuListItemButtonView( locale );
+
+				buttonView.set( {
+					role: 'menuitemradio',
+					isToggleable: true
+				} );
+
+				buttonView.bind( ...Object.keys( definition.model ) as Array<keyof MenuBarMenuListItemButtonView> ).to( definition.model );
+				buttonView.delegate( 'execute' ).to( menuView );
+
+				buttonView.on( 'execute', () => {
+					editor.execute( ( definition.model as any ).commandName, {
+						value: ( definition.model as any ).commandParam
+					} );
+
+					editor.editing.view.focus();
+				} );
+
+				listItemView.children.add( buttonView );
+				listView.items.add( listItemView );
+			}
+
+			menuView.panelView.children.add( listView );
+
+			return menuView;
 		} );
 	}
 
@@ -135,13 +176,13 @@ export default class FontSizeUI extends Plugin {
 /**
  * Prepares FontSize dropdown items.
  */
-function _prepareListOptions( options: Array<FontSizeOption>, command: FontSizeCommand ): Collection<ListDropdownItemDefinition> {
-	const itemDefinitions = new Collection<ListDropdownItemDefinition>();
+function _prepareListOptions( options: Array<FontSizeOption>, command: FontSizeCommand ): Collection<ListDropdownButtonDefinition> {
+	const itemDefinitions = new Collection<ListDropdownButtonDefinition>();
 
 	for ( const option of options ) {
 		const def = {
 			type: 'button' as const,
-			model: new Model( {
+			model: new ViewModel( {
 				commandName: FONT_SIZE,
 				commandParam: option.model,
 				label: option.title,

@@ -1,27 +1,28 @@
+//@ts-nocheck
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module link/linkimageui
  */
 
-import { ButtonView } from 'ckeditor5/src/ui';
-import { Plugin } from 'ckeditor5/src/core';
+import { ButtonView } from 'ckeditor5/src/ui.js';
+import { Plugin } from 'ckeditor5/src/core.js';
 import type {
 	DocumentSelection,
 	Selection,
-	ViewDocumentClickEvent
-} from 'ckeditor5/src/engine';
+	ViewDocumentClickEvent,
+} from 'ckeditor5/src/engine.js';
 
 import type { ImageUtils } from '@ckeditor/ckeditor5-image';
 
-import LinkUI from './linkui';
-import LinkEditing from './linkediting';
-import type LinkCommand from './linkcommand';
+import LinkUI from './linkui.js';
+import LinkEditing from './linkediting.js';
+import type LinkCommand from './linkcommand.js';
 
-import { LINK_KEYSTROKE } from './utils';
+import { LINK_KEYSTROKE } from './utils.js';
 
 import linkIcon from '../theme/icons/link.svg';
 
@@ -36,14 +37,21 @@ export default class LinkImageUI extends Plugin {
 	 * @inheritDoc
 	 */
 	public static get requires() {
-		return [ LinkEditing, LinkUI, 'ImageBlockEditing' ] as const;
+		return [LinkEditing, LinkUI, 'ImageBlockEditing'] as const;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public static get pluginName(): 'LinkImageUI' {
-		return 'LinkImageUI';
+	public static get pluginName() {
+		return 'LinkImageUI' as const;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static override get isOfficialPlugin(): true {
+		return true;
 	}
 
 	/**
@@ -53,16 +61,23 @@ export default class LinkImageUI extends Plugin {
 		const editor = this.editor;
 		const viewDocument = editor.editing.view.document;
 
-		this.listenTo<ViewDocumentClickEvent>( viewDocument, 'click', ( evt, data ) => {
-			if ( this._isSelectedLinkedImage( editor.model.document.selection ) ) {
-				// Prevent browser navigation when clicking a linked image.
-				data.preventDefault();
+		this.listenTo<ViewDocumentClickEvent>(
+			viewDocument,
+			'click',
+			(evt, data) => {
+				if (
+					this._isSelectedLinkedImage(editor.model.document.selection)
+				) {
+					// Prevent browser navigation when clicking a linked image.
+					data.preventDefault();
 
-				// Block the `LinkUI` plugin when an image was clicked.
-				// In such a case, we'd like to display the image toolbar.
-				evt.stop();
-			}
-		}, { priority: 'high' } );
+					// Block the `LinkUI` plugin when an image was clicked.
+					// In such a case, we'd like to display the image toolbar.
+					evt.stop();
+				}
+			},
+			{ priority: 'high' }
+		);
 
 		this._createToolbarLinkImageButton();
 	}
@@ -78,45 +93,52 @@ export default class LinkImageUI extends Plugin {
 		const editor = this.editor;
 		const t = editor.t;
 
-		editor.ui.componentFactory.add( 'linkImage', locale => {
-			const button = new ButtonView( locale );
-			const plugin = editor.plugins.get( 'LinkUI' );
-			const linkCommand: LinkCommand = editor.commands.get( 'link' )!;
+		editor.ui.componentFactory.add('linkImage', (locale) => {
+			const button = new ButtonView(locale);
+			const plugin = editor.plugins.get('LinkUI');
+			const linkCommand: LinkCommand = editor.commands.get('link')!;
 
-			button.set( {
+			button.set({
 				isEnabled: true,
-				label: t( 'Link image' ),
+				label: t('Link image'),
 				icon: linkIcon,
 				keystroke: LINK_KEYSTROKE,
 				tooltip: true,
-				isToggleable: true
-			} );
+				isToggleable: true,
+			});
 
 			// Bind button to the command.
-			button.bind( 'isEnabled' ).to( linkCommand, 'isEnabled' );
-			button.bind( 'isOn' ).to( linkCommand, 'value', value => !!value );
+			button.bind('isEnabled').to(linkCommand, 'isEnabled');
+			button.bind('isOn').to(linkCommand, 'value', (value) => !!value);
 
 			// Show the actionsView or formView (both from LinkUI) on button click depending on whether the image is linked already.
-			this.listenTo( button, 'execute', () => {
-				if ( this._isSelectedLinkedImage( editor.model.document.selection ) ) {
+			this.listenTo(button, 'execute', () => {
+				if (
+					this._isSelectedLinkedImage(editor.model.document.selection)
+				) {
 					plugin._addActionsView();
 				} else {
-					plugin._showUI( true );
+					plugin._showUI(true);
 				}
-			} );
+			});
 
 			return button;
-		} );
+		});
 	}
 
 	/**
 	 * Returns true if a linked image (either block or inline) is the only selected element
 	 * in the model document.
 	 */
-	private _isSelectedLinkedImage( selection: DocumentSelection | Selection ): boolean {
+	private _isSelectedLinkedImage(
+		selection: DocumentSelection | Selection
+	): boolean {
 		const selectedModelElement = selection.getSelectedElement();
-		const imageUtils: ImageUtils = this.editor.plugins.get( 'ImageUtils' );
+		const imageUtils: ImageUtils = this.editor.plugins.get('ImageUtils');
 
-		return imageUtils.isImage( selectedModelElement ) && selectedModelElement.hasAttribute( 'linkHref' );
+		return (
+			imageUtils.isImage(selectedModelElement) &&
+			selectedModelElement.hasAttribute('linkHref')
+		);
 	}
 }

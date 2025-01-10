@@ -1,15 +1,15 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module link/linkimage
  */
 
-import { Plugin } from 'ckeditor5/src/core';
-import LinkImageEditing from './linkimageediting';
-import LinkImageUI from './linkimageui';
+import { Plugin } from 'ckeditor5/src/core.js';
+import LinkImageEditing from './linkimageediting.js';
+import LinkImageUI from './linkimageui.js';
 
 import '../theme/linkimage.css';
 
@@ -30,7 +30,14 @@ export default class LinkImage extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
-	public static get pluginName(): 'LinkImage' {
-		return 'LinkImage';
+	public static get pluginName() {
+		return 'LinkImage' as const;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static override get isOfficialPlugin(): true {
+		return true;
 	}
 }

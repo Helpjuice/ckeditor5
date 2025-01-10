@@ -1,14 +1,14 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module font/fontsize/utils
  */
 
-import { CKEditorError } from 'ckeditor5/src/utils';
-import { type FontSizeOption } from '../fontconfig';
+import { CKEditorError } from 'ckeditor5/src/utils.js';
+import { type FontSizeOption } from '../fontconfig.js';
 
 /**
  * Normalizes and translates the {@link module:font/fontconfig~FontSizeConfig#options configuration options}

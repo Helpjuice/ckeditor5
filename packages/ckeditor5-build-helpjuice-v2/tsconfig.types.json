@@ -4,10 +4,9 @@
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"declarationDir": "build",
-		"stripInternal": true
+		"stripInternal": true,
+		"skipLibCheck": true,
+		"noImplicitReturns": false
 	},
-	"include": [
-		"src",
-		"../../typings"
-	]
+	"include": ["src", "../../typings"]
 }

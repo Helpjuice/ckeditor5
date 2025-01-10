@@ -1,22 +1,22 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module link/utils/manualdecorator
  */
 
-import { ObservableMixin, type ArrayOrItem } from 'ckeditor5/src/utils';
-import type { MatcherPattern, MatcherObjectPattern } from 'ckeditor5/src/engine';
-import type { NormalizedLinkDecoratorManualDefinition } from '../utils';
+import { ObservableMixin, type ArrayOrItem } from 'ckeditor5/src/utils.js';
+import type { MatcherObjectPattern } from 'ckeditor5/src/engine.js';
+import type { NormalizedLinkDecoratorManualDefinition } from '../utils.js';
 
 /**
  * Helper class that stores manual decorators with observable {@link module:link/utils/manualdecorator~ManualDecorator#value}
  * to support integration with the UI state. An instance of this class is a model with the state of individual manual decorators.
  * These decorators are kept as collections in {@link module:link/linkcommand~LinkCommand#manualDecorators}.
  */
-export default class ManualDecorator extends ObservableMixin() {
+export default class ManualDecorator extends /* #__PURE__ */ ObservableMixin() {
 	/**
 	 * An ID of a manual decorator which is the name of the attribute in the model, for example: 'linkManualDecorator0'.
 	 */

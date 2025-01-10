@@ -1,6 +1,7 @@
+//@ts-nocheck
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 import type {
@@ -13,12 +14,11 @@ import type {
 	LinkImageUI,
 	LinkUI,
 	LinkCommand,
-	UnlinkCommand
-} from './index';
+	UnlinkCommand,
+} from './index.js';
 
 declare module '@ckeditor/ckeditor5-core' {
 	interface EditorConfig {
-
 		/**
 		 * The configuration of the {@link module:link/link~Link} feature.
 		 *
@@ -28,13 +28,13 @@ declare module '@ckeditor/ckeditor5-core' {
 	}
 
 	interface PluginsMap {
-		[ AutoLink.pluginName ]: AutoLink;
-		[ Link.pluginName ]: Link;
-		[ LinkEditing.pluginName ]: LinkEditing;
-		[ LinkImage.pluginName ]: LinkImage;
-		[ LinkImageEditing.pluginName ]: LinkImageEditing;
-		[ LinkImageUI.pluginName ]: LinkImageUI;
-		[ LinkUI.pluginName ]: LinkUI;
+		[AutoLink.pluginName]: AutoLink;
+		[Link.pluginName]: Link;
+		[LinkEditing.pluginName]: LinkEditing;
+		[LinkImage.pluginName]: LinkImage;
+		[LinkImageEditing.pluginName]: LinkImageEditing;
+		[LinkImageUI.pluginName]: LinkImageUI;
+		[LinkUI.pluginName]: LinkUI;
 	}
 
 	interface CommandsMap {
