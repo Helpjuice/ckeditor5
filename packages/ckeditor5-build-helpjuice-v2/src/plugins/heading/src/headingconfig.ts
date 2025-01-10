@@ -1,13 +1,14 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module heading/headingconfig
  */
 
-import type { ViewElementDefinition } from 'ckeditor5/src/engine';
+import type { ArrayOrItem } from 'ckeditor5/src/utils.js';
+import type { MatcherPattern, ViewElementDefinition } from 'ckeditor5/src/engine.js';
 
 /**
  * The configuration of the heading feature.
@@ -79,7 +80,7 @@ export interface HeadingElementOption {
 	/**
 	 * Name of the model element to convert.
 	 */
-	model: 'heading1' | 'heading2' | 'heading3' | 'heading4' | 'heading5' | 'heading6';
+	model: 'heading1' | 'heading2' | 'heading3' | 'heading4' | 'heading5' | 'heading6' | `heading${ string }` & Record<never, never>;
 
 	/**
 	 * Definition of a view element to convert from/to.
@@ -100,6 +101,11 @@ export interface HeadingElementOption {
 	 * Icon used by {@link module:heading/headingbuttonsui~HeadingButtonsUI}. It can be omitted when using the default configuration.
 	 */
 	icon?: string;
+
+	/**
+	 * An array with all matched elements that the view-to-model conversion should also accept.
+	 */
+	upcastAlso?: ArrayOrItem<ViewElementDefinition | MatcherPattern>;
 }
 
 export interface HeadingParagraphOption {
@@ -123,4 +129,9 @@ export interface HeadingParagraphOption {
 	 * Icon used by {@link module:heading/headingbuttonsui~HeadingButtonsUI}. It can be omitted when using the default configuration.
 	 */
 	icon?: string;
+
+	/**
+	 * An array with all matched elements that the view-to-model conversion should also accept.
+	 */
+	upcastAlso?: ArrayOrItem<ViewElementDefinition | MatcherPattern>;
 }

@@ -1,19 +1,19 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module heading/headingediting
  */
 
-import { Plugin, type Editor } from 'ckeditor5/src/core';
-import { Paragraph } from 'ckeditor5/src/paragraph';
-import { priorities } from 'ckeditor5/src/utils';
-import type { EnterCommandAfterExecuteEvent } from 'ckeditor5/src/enter';
-import type { HeadingOption } from './headingconfig';
+import { Plugin, type Editor } from 'ckeditor5/src/core.js';
+import { Paragraph } from 'ckeditor5/src/paragraph.js';
+import { priorities } from 'ckeditor5/src/utils.js';
+import type { EnterCommandAfterExecuteEvent } from 'ckeditor5/src/enter.js';
+import type { HeadingOption } from './headingconfig.js';
 
-import HeadingCommand from './headingcommand';
+import HeadingCommand from './headingcommand.js';
 
 const defaultModelElement = 'paragraph';
 
@@ -26,8 +26,15 @@ export default class HeadingEditing extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
-	public static get pluginName(): 'HeadingEditing' {
-		return 'HeadingEditing';
+	public static get pluginName() {
+		return 'HeadingEditing' as const;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static override get isOfficialPlugin(): true {
+		return true;
 	}
 
 	/**
@@ -61,26 +68,21 @@ export default class HeadingEditing extends Plugin {
 		const options: Array<HeadingOption> = editor.config.get( 'heading.options' )!;
 
 		const modelElements = [];
-		// 'options' is possibly 'undefined'
-		if ( options === undefined ) {
-			throw new Error( 'options is undefined' );
-		}
+
 		for ( const option of options ) {
 			// Skip paragraph - it is defined in required Paragraph feature.
-			if ( option.model !== defaultModelElement ) {
-				// Schema.
-				editor.model.schema.register( option.model, {
-					inheritAllFrom: '$block',
-					allowAttributes: ['id', 'data-toc', 'data-ai-suggestion']
-				} );
-
-				editor.conversion.elementToElement( option );
-				editor.conversion.attributeToAttribute( { model: 'id', view: 'id' } );
-				editor.conversion.attributeToAttribute( { model: 'data-toc', view: 'data-toc' } );
-				editor.conversion.attributeToAttribute( { model: 'data-ai-suggestion', view: 'data-ai-suggestion' } );
-
-				modelElements.push( option.model );
+			if ( option.model === 'paragraph' ) {
+				continue;
 			}
+
+			// Schema.
+			editor.model.schema.register( option.model, {
+				inheritAllFrom: '$block'
+			} );
+
+			editor.conversion.elementToElement( option );
+
+			modelElements.push( option.model );
 		}
 
 		this._addDefaultH1Conversion( editor );
@@ -122,7 +124,7 @@ export default class HeadingEditing extends Plugin {
 			view: 'h1',
 			// With a `low` priority, `paragraph` plugin autoparagraphing mechanism is executed. Make sure
 			// this listener is called before it. If not, `h1` will be transformed into a paragraph.
-			converterPriority: priorities.get( 'low' ) + 1
+			converterPriority: priorities.low + 1
 		} );
 	}
 }

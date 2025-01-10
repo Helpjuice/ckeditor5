@@ -1,6 +1,7 @@
+// @ts-nocheck
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 import type {
@@ -10,12 +11,11 @@ import type {
 	HeadingEditing,
 	HeadingUI,
 	Title,
-	TitleConfig
-} from './index';
+	TitleConfig,
+} from './index.js';
 
 declare module '@ckeditor/ckeditor5-core' {
 	interface EditorConfig {
-
 		/**
 		 * The configuration of the heading feature. Introduced by the {@link module:heading/headingediting~HeadingEditing} feature.
 		 *
@@ -33,11 +33,9 @@ declare module '@ckeditor/ckeditor5-core' {
 
 	interface PluginsMap {
 		[Heading.pluginName]: Heading;
-		// @ts-ignore
-		[ HeadingEditing.pluginName ]: HeadingEditing;
+		[HeadingEditing.pluginName]: HeadingEditing;
 		[HeadingUI.pluginName]: HeadingUI;
-		// @ts-ignore
-		[ Title.pluginName ]: Title;
+		[Title.pluginName]: Title;
 	}
 
 	interface CommandsMap {
