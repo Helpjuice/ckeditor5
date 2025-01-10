@@ -1,37 +1,41 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module font/ui/colorui
  */
 
-import { Plugin, type Editor } from 'ckeditor5/src/core';
-import type { Batch } from 'ckeditor5/src/engine';
-import { createDropdown, normalizeColorOptions, getLocalizedColorOptions, focusChildOnDropdownOpen } from 'ckeditor5/src/ui';
+import { Plugin, type Editor } from 'ckeditor5/src/core.js';
+import type { Batch } from 'ckeditor5/src/engine.js';
+import {
+	createDropdown,
+	normalizeColorOptions,
+	getLocalizedColorOptions,
+	focusChildOnDropdownOpen,
+	type ColorSelectorExecuteEvent,
+	type ColorSelectorColorPickerCancelEvent,
+	type ColorSelectorColorPickerShowEvent,
+	MenuBarMenuView,
+	ColorSelectorView
+} from 'ckeditor5/src/ui.js';
 
 import {
-	addColorTableToDropdown,
-	type ColorTableDropdownView,
+	addColorSelectorToDropdown,
+	type ColorSelectorDropdownView,
 	type FONT_BACKGROUND_COLOR,
 	type FONT_COLOR
-} from '../utils';
-import {
-	type default as ColorTableView,
-	type ColorTableExecuteEvent,
-	type ColorTableCancelEvent,
-	type ColorTableShowColorPickerEvent
-} from './colortableview';
-import type FontColorCommand from '../fontcolor/fontcolorcommand';
-import type FontBackgroundColorCommand from '../fontbackgroundcolor/fontbackgroundcolorcommand';
-import type { FontColorConfig } from '../fontconfig';
+} from '../utils.js';
+import type FontColorCommand from '../fontcolor/fontcolorcommand.js';
+import type FontBackgroundColorCommand from '../fontbackgroundcolor/fontbackgroundcolorcommand.js';
+import type { FontColorConfig } from '../fontconfig.js';
 
 /**
  * The color UI plugin which isolates the common logic responsible for displaying dropdowns with color grids.
  *
  * It is used to create the `'fontBackgroundColor'` and `'fontColor'` dropdowns, each hosting
- * a {@link module:font/ui/colortableview~ColorTableView}.
+ * a {@link module:ui/colorselector/colorselectorview~ColorSelectorView}.
  */
 export default class ColorUI extends Plugin {
 	/**
@@ -61,17 +65,13 @@ export default class ColorUI extends Plugin {
 	public columns: number;
 
 	/**
-	 * Keeps a reference to {@link module:font/ui/colortableview~ColorTableView}.
-	 */
-	public colorTableView: ColorTableView | undefined;
-
-	/**
 	 * Keeps all changes in color picker in one batch while dropdown is open.
 	 */
 	declare private _undoStepBatch: Batch;
 
 	/**
-	 * Creates a plugin which introduces a dropdown with a pre–configured {@link module:font/ui/colortableview~ColorTableView}.
+	 * Creates a plugin which introduces a dropdown with a pre–configured
+	 * {@link module:ui/colorselector/colorselectorview~ColorSelectorView}.
 	 *
 	 * @param config The configuration object.
 	 * @param config.commandName The name of the command which will be executed when a color tile is clicked.
@@ -96,7 +96,6 @@ export default class ColorUI extends Plugin {
 		this.icon = icon;
 		this.dropdownLabel = dropdownLabel;
 		this.columns = editor.config.get( `${ this.componentName }.columns` )!;
-		this.colorTableView = undefined;
 	}
 
 	/**
@@ -115,11 +114,11 @@ export default class ColorUI extends Plugin {
 
 		// Register the UI component.
 		editor.ui.componentFactory.add( this.componentName, locale => {
-			const dropdownView: ColorTableDropdownView = createDropdown( locale );
+			const dropdownView: ColorSelectorDropdownView = createDropdown( locale );
 			// Font color dropdown rendering is deferred once it gets open to improve performance (#6192).
 			let dropdownContentRendered = false;
 
-			this.colorTableView = addColorTableToDropdown( {
+			const colorSelectorView = addColorSelectorToDropdown( {
 				dropdownView,
 				colors: localizedColors.map( option => ( {
 					label: option.label,
@@ -133,10 +132,10 @@ export default class ColorUI extends Plugin {
 				colorPickerLabel: t( 'Color picker' ),
 				documentColorsLabel: documentColorsCount !== 0 ? t( 'Document colors' ) : '',
 				documentColorsCount: documentColorsCount === undefined ? this.columns : documentColorsCount,
-				colorPickerConfig: hasColorPicker ? ( componentConfig.colorPicker || {} ) : false
+				colorPickerViewConfig: hasColorPicker ? ( componentConfig.colorPicker || {} ) : false
 			} );
 
-			this.colorTableView.bind( 'selectedColor' ).to( command, 'value' );
+			colorSelectorView.bind( 'selectedColor' ).to( command, 'value' );
 
 			dropdownView.buttonView.set( {
 				label: this.dropdownLabel,
@@ -152,7 +151,7 @@ export default class ColorUI extends Plugin {
 
 			dropdownView.bind( 'isEnabled' ).to( command );
 
-			this.colorTableView.on<ColorTableExecuteEvent>( 'execute', ( evt, data ) => {
+			colorSelectorView.on<ColorSelectorExecuteEvent>( 'execute', ( evt, data ) => {
 				if ( dropdownView.isOpen ) {
 					editor.execute( this.commandName, {
 						value: data.value,
@@ -163,13 +162,17 @@ export default class ColorUI extends Plugin {
 				if ( data.source !== 'colorPicker' ) {
 					editor.editing.view.focus();
 				}
+
+				if ( data.source === 'colorPickerSaveButton' ) {
+					dropdownView.isOpen = false;
+				}
 			} );
 
-			this.colorTableView.on<ColorTableShowColorPickerEvent>( 'showColorPicker', () => {
+			colorSelectorView.on<ColorSelectorColorPickerShowEvent>( 'colorPicker:show', () => {
 				this._undoStepBatch = editor.model.createBatch();
 			} );
 
-			this.colorTableView.on<ColorTableCancelEvent>( 'cancel', () => {
+			colorSelectorView.on<ColorSelectorColorPickerCancelEvent>( 'colorPicker:cancel', () => {
 				if ( this._undoStepBatch!.operations.length ) {
 					// We need to close the dropdown before the undo batch.
 					// Otherwise, ColorUI treats undo as a selected color change,
@@ -186,27 +189,90 @@ export default class ColorUI extends Plugin {
 				if ( !dropdownContentRendered ) {
 					dropdownContentRendered = true;
 
-					dropdownView.colorTableView!.appendUI();
+					dropdownView.colorSelectorView!.appendUI();
 				}
 
 				if ( isVisible ) {
 					if ( documentColorsCount !== 0 ) {
-						this.colorTableView!.updateDocumentColors( editor.model, this.componentName );
+						colorSelectorView!.updateDocumentColors( editor.model, this.componentName );
 					}
 
-					this.colorTableView!.updateSelectedColors();
-				} else {
-					this.colorTableView!.showColorGrids();
+					colorSelectorView!.updateSelectedColors();
+					colorSelectorView!.showColorGridsFragment();
 				}
 			} );
 
 			// Accessibility: focus the first active color when opening the dropdown.
 			focusChildOnDropdownOpen(
 				dropdownView,
-				() => dropdownView.colorTableView!.colorGridsPageView.staticColorsGrid!.items.find( ( item: any ) => item.isOn )
+				() => dropdownView.colorSelectorView!.colorGridsFragmentView.staticColorsGrid!.items.find( ( item: any ) => item.isOn )
 			);
 
 			return dropdownView;
+		} );
+
+		// Register menu bar button..
+		editor.ui.componentFactory.add( `menuBar:${ this.componentName }`, locale => {
+			const menuView = new MenuBarMenuView( locale );
+
+			menuView.buttonView.set( {
+				label: this.dropdownLabel,
+				icon: this.icon
+			} );
+
+			menuView.bind( 'isEnabled' ).to( command );
+
+			// Font color sub-menu rendering is deferred once it gets open to improve performance (#6192).
+			let contentRendered = false;
+
+			const colorSelectorView = new ColorSelectorView( locale, {
+				colors: localizedColors.map( option => ( {
+					label: option.label,
+					color: option.model,
+					options: {
+						hasBorder: option.hasBorder
+					}
+				} ) ),
+				columns: this.columns,
+				removeButtonLabel: t( 'Remove color' ),
+				colorPickerLabel: t( 'Color picker' ),
+				documentColorsLabel: documentColorsCount !== 0 ? t( 'Document colors' ) : '',
+				documentColorsCount: documentColorsCount === undefined ? this.columns : documentColorsCount,
+				colorPickerViewConfig: false
+			} );
+
+			colorSelectorView.bind( 'selectedColor' ).to( command, 'value' );
+
+			colorSelectorView.delegate( 'execute' ).to( menuView );
+			colorSelectorView.on<ColorSelectorExecuteEvent>( 'execute', ( evt, data ) => {
+				editor.execute( this.commandName, {
+					value: data.value,
+					batch: this._undoStepBatch
+				} );
+
+				editor.editing.view.focus();
+			} );
+
+			menuView.on( 'change:isOpen', ( evt, name, isVisible ) => {
+				if ( !contentRendered ) {
+					contentRendered = true;
+
+					colorSelectorView!.appendUI();
+				}
+
+				if ( isVisible ) {
+					if ( documentColorsCount !== 0 ) {
+						colorSelectorView!.updateDocumentColors( editor.model, this.componentName );
+					}
+
+					colorSelectorView!.updateSelectedColors();
+					colorSelectorView!.showColorGridsFragment();
+				}
+			} );
+
+			menuView.panelView.children.add( colorSelectorView );
+
+			return menuView;
 		} );
 	}
 }
