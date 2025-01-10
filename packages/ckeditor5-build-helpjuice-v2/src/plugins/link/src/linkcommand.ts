@@ -1,37 +1,38 @@
+//@ts-nocheck
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
 /**
  * @module link/linkcommand
  */
 
-import { Command } from 'ckeditor5/src/core';
-import { findAttributeRange } from 'ckeditor5/src/typing';
-import { Collection, first, toMap } from 'ckeditor5/src/utils';
-import type { Range, DocumentSelection, Model, Writer } from 'ckeditor5/src/engine';
+import { Command } from 'ckeditor5/src/core.js';
+import { findAttributeRange } from 'ckeditor5/src/typing.js';
+import { Collection, first, toMap } from 'ckeditor5/src/utils.js';
+import type {
+	Range,
+	DocumentSelection,
+	Model,
+	Writer,
+} from 'ckeditor5/src/engine.js';
 
-import AutomaticDecorators from './utils/automaticdecorators';
-import { isLinkableElement } from './utils';
-import type ManualDecorator from './utils/manualdecorator';
+import AutomaticDecorators from './utils/automaticdecorators.js';
+import { isLinkableElement } from './utils.js';
+import type ManualDecorator from './utils/manualdecorator.js';
 
 /**
  * The link command. It is used by the {@link module:link/link~Link link feature}.
  */
 export default class LinkCommand extends Command {
 	/**
-	 * The text of the link.
-	 */
-	declare public text: any;
-
-	/**
 	 * The value of the `'linkHref'` attribute if the start of the selection is located in a node with this attribute.
 	 *
 	 * @observable
 	 * @readonly
 	 */
-	declare public value: string | undefined;
+	public declare value: string | undefined;
 
 	/**
 	 * A collection of {@link module:link/utils/manualdecorator~ManualDecorator manual decorators}
@@ -51,8 +52,10 @@ export default class LinkCommand extends Command {
 	 * Synchronizes the state of {@link #manualDecorators} with the currently present elements in the model.
 	 */
 	public restoreManualDecoratorStates(): void {
-		for ( const manualDecorator of this.manualDecorators ) {
-			manualDecorator.value = this._getDecoratorStateFromModel( manualDecorator.id );
+		for (const manualDecorator of this.manualDecorators) {
+			manualDecorator.value = this._getDecoratorStateFromModel(
+				manualDecorator.id
+			);
 		}
 	}
 
@@ -62,26 +65,34 @@ export default class LinkCommand extends Command {
 	public override refresh(): void {
 		const model = this.editor.model;
 		const selection = model.document.selection;
-		const selectedElement = selection.getSelectedElement() || first( selection.getSelectedBlocks() );
-
-		if ( selection.isCollapsed ) {
-			this.text = extractTextFromSelection( selection );
-		} else {
-			this.text = Array.from( selection.getFirstRange()!.getItems() ).map( ( item: any ) => item.data ).join( '' );
-		}
+		const selectedElement =
+			selection.getSelectedElement() ||
+			first(selection.getSelectedBlocks());
 
 		// A check for any integration that allows linking elements (e.g. `LinkImage`).
 		// Currently the selection reads attributes from text nodes only. See #7429 and #7465.
-		if ( isLinkableElement( selectedElement, model.schema ) ) {
-			this.value = selectedElement.getAttribute( 'linkHref' ) as string | undefined;
-			this.isEnabled = model.schema.checkAttribute( selectedElement, 'linkHref' );
+		if (isLinkableElement(selectedElement, model.schema)) {
+			this.value = selectedElement.getAttribute('linkHref') as
+				| string
+				| undefined;
+			this.isEnabled = model.schema.checkAttribute(
+				selectedElement,
+				'linkHref'
+			);
 		} else {
-			this.value = selection.getAttribute( 'linkHref' ) as string | undefined;
-			this.isEnabled = model.schema.checkAttributeInSelection( selection, 'linkHref' );
+			this.value = selection.getAttribute('linkHref') as
+				| string
+				| undefined;
+			this.isEnabled = model.schema.checkAttributeInSelection(
+				selection,
+				'linkHref'
+			);
 		}
 
-		for ( const manualDecorator of this.manualDecorators ) {
-			manualDecorator.value = this._getDecoratorStateFromModel( manualDecorator.id );
+		for (const manualDecorator of this.manualDecorators) {
+			manualDecorator.value = this._getDecoratorStateFromModel(
+				manualDecorator.id
+			);
 		}
 	}
 
@@ -150,106 +161,109 @@ export default class LinkCommand extends Command {
 	 * @param href Link destination.
 	 * @param manualDecoratorIds The information about manual decorator attributes to be applied or removed upon execution.
 	 */
-	public override execute( href: string, text: string | null = null, manualDecoratorIds: Record<string, boolean> = {} ): void {
+	public override execute(
+		href: string,
+		manualDecoratorIds: Record<string, boolean> = {}
+	): void {
 		const model = this.editor.model;
 		const selection = model.document.selection;
 		// Stores information about manual decorators to turn them on/off when command is applied.
 		const truthyManualDecorators: Array<string> = [];
 		const falsyManualDecorators: Array<string> = [];
 
-		for ( const name in manualDecoratorIds ) {
-			if ( manualDecoratorIds[ name ] ) {
-				truthyManualDecorators.push( name );
+		for (const name in manualDecoratorIds) {
+			if (manualDecoratorIds[name]) {
+				truthyManualDecorators.push(name);
 			} else {
-				falsyManualDecorators.push( name );
+				falsyManualDecorators.push(name);
 			}
 		}
 
-		model.change( writer => {
+		model.change((writer) => {
 			// If selection is collapsed then update selected link or insert new one at the place of caret.
-			if ( selection.isCollapsed ) {
+			if (selection.isCollapsed) {
 				const position = selection.getFirstPosition()!;
-				const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
-				let extraAttributes: any = {};
-
-				// maintain extra attributes
-				if ( linkBlock ) {
-					const children = getLinkNodes( linkBlock, selection );
-
-					if ( linkBlock.childCount === 1 || ( linkBlock.childCount === 2 && children.length === 1 ) ) {
-						extraAttributes = Object.fromEntries( children[ 0 ]._attrs );
-						delete extraAttributes.linkHref;
-					} else {
-						// get attributes that are shared by all children
-						const sharedAttributes: any = getSharedAttributes( children );
-
-						for ( const attribute in sharedAttributes ) {
-							if ( sharedAttributes[ attribute ] !== null ) {
-								extraAttributes[ attribute ] = sharedAttributes[ attribute ];
-							}
-						}
-					}
-				}
 
 				// When selection is inside text with `linkHref` attribute.
-				if ( selection.hasAttribute( 'linkHref' ) ) {
-					const linkText = text || extractTextFromSelection( selection );
+				if (selection.hasAttribute('linkHref')) {
+					const linkText = extractTextFromSelection(selection);
 					// Then update `linkHref` value.
-					let linkRange = findAttributeRange( position, 'linkHref', selection.getAttribute( 'linkHref' ), model );
+					let linkRange = findAttributeRange(
+						position,
+						'linkHref',
+						selection.getAttribute('linkHref'),
+						model
+					);
 
-					if ( text !== extractTextFromSelection( selection ) ) {
-						linkRange = this._updateLinkContent( model, writer, linkRange, href, linkText, extraAttributes );
+					if (selection.getAttribute('linkHref') === linkText) {
+						linkRange = this._updateLinkContent(
+							model,
+							writer,
+							linkRange,
+							href
+						);
 					}
 
-					writer.setAttribute( 'linkHref', href, linkRange );
+					writer.setAttribute('linkHref', href, linkRange);
 
-					truthyManualDecorators.forEach( item => {
-						writer.setAttribute( item, true, linkRange );
-					} );
+					truthyManualDecorators.forEach((item) => {
+						writer.setAttribute(item, true, linkRange);
+					});
 
-					falsyManualDecorators.forEach( item => {
-						writer.removeAttribute( item, linkRange );
-					} );
+					falsyManualDecorators.forEach((item) => {
+						writer.removeAttribute(item, linkRange);
+					});
 
 					// Put the selection at the end of the updated link.
-					writer.setSelection( writer.createPositionAfter( linkRange.end.nodeBefore! ) );
+					writer.setSelection(
+						writer.createPositionAfter(linkRange.end.nodeBefore!)
+					);
 				}
 				// If not then insert text node with `linkHref` attribute in place of caret.
 				// However, since selection is collapsed, attribute value will be used as data for text node.
 				// So, if `href` is empty, do not create text node.
-				else if ( href !== '' ) {
-					const attributes = toMap( selection.getAttributes() );
+				else if (href !== '') {
+					const attributes = toMap(selection.getAttributes());
 
-					attributes.set( 'linkHref', href );
+					attributes.set('linkHref', href);
 
-					truthyManualDecorators.forEach( item => {
-						attributes.set( item, true );
-					} );
+					truthyManualDecorators.forEach((item) => {
+						attributes.set(item, true);
+					});
 
-					const { end: positionAfter } = model.insertContent( writer.createText( text || href, attributes ), position );
+					const { end: positionAfter } = model.insertContent(
+						writer.createText(href, attributes),
+						position
+					);
 
 					// Put the selection at the end of the inserted link.
 					// Using end of range returned from insertContent in case nodes with the same attributes got merged.
-					writer.setSelection( positionAfter );
+					writer.setSelection(positionAfter);
 				}
 
 				// Remove the `linkHref` attribute and all link decorators from the selection.
 				// It stops adding a new content into the link element.
-				[ 'linkHref', ...truthyManualDecorators, ...falsyManualDecorators ].forEach( item => {
-					writer.removeSelectionAttribute( item );
-				} );
+				[
+					'linkHref',
+					...truthyManualDecorators,
+					...falsyManualDecorators,
+				].forEach((item) => {
+					writer.removeSelectionAttribute(item);
+				});
 			} else {
 				// If selection has non-collapsed ranges, we change attribute on nodes inside those ranges
 				// omitting nodes where the `linkHref` attribute is disallowed.
-				const ranges = model.schema.getValidRanges( selection.getRanges(), 'linkHref' );
-				const originalText = Array.from( selection.getFirstRange()!.getItems() ).map( ( item: any ) => item.data ).join( '' );
+				const ranges = model.schema.getValidRanges(
+					selection.getRanges(),
+					'linkHref'
+				);
 
 				// But for the first, check whether the `linkHref` attribute is allowed on selected blocks (e.g. the "image" element).
 				const allowedRanges = [];
 
-				for ( const element of selection.getSelectedBlocks() ) {
-					if ( model.schema.checkAttribute( element, 'linkHref' ) ) {
-						allowedRanges.push( writer.createRangeOn( element ) );
+				for (const element of selection.getSelectedBlocks()) {
+					if (model.schema.checkAttribute(element, 'linkHref')) {
+						allowedRanges.push(writer.createRangeOn(element));
 					}
 				}
 
@@ -258,47 +272,44 @@ export default class LinkCommand extends Command {
 
 				// For all selection ranges we want to check whether given range is inside an element that accepts the `linkHref` attribute.
 				// If so, we don't want to propagate applying the attribute to its children.
-				for ( const range of ranges ) {
-					if ( this._isRangeToUpdate( range, allowedRanges ) ) {
-						rangesToUpdate.push( range );
+				for (const range of ranges) {
+					if (this._isRangeToUpdate(range, allowedRanges)) {
+						rangesToUpdate.push(range);
 					}
 				}
 
-				for ( const range of rangesToUpdate ) {
+				for (const range of rangesToUpdate) {
 					let linkRange = range;
 
-					if ( rangesToUpdate.length === 1 ) {
+					if (rangesToUpdate.length === 1) {
 						// Current text of the link in the document.
-						const linkText = text || extractTextFromSelection( selection );
-						const attributes = Object.fromEntries( selection.getAttributes() );
+						const linkText = extractTextFromSelection(selection);
 
-						if ( text !== originalText ) {
-							linkRange = this._updateLinkContent( model, writer, range, href, linkText, attributes );
-							writer.setSelection( writer.createSelection( linkRange ) );
-						}
-					} else if ( selectionIsLink( selection ) ) {
-						const linkText = text || extractTextFromSelection( selection );
-						const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
-						const children = getLinkNodes( linkBlock, selection );
-						const attributes = getSharedAttributes( children );
-
-						if ( text !== originalText ) {
-							linkRange = this._updateLinkContent( model, writer, range, href, linkText, attributes );
+						if (selection.getAttribute('linkHref') === linkText) {
+							linkRange = this._updateLinkContent(
+								model,
+								writer,
+								range,
+								href
+							);
+							writer.setSelection(
+								writer.createSelection(linkRange)
+							);
 						}
 					}
 
-					writer.setAttribute( 'linkHref', href, linkRange );
+					writer.setAttribute('linkHref', href, linkRange);
 
-					truthyManualDecorators.forEach( item => {
-						writer.setAttribute( item, true, linkRange );
-					} );
+					truthyManualDecorators.forEach((item) => {
+						writer.setAttribute(item, true, linkRange);
+					});
 
-					falsyManualDecorators.forEach( item => {
-						writer.removeAttribute( item, linkRange );
-					} );
+					falsyManualDecorators.forEach((item) => {
+						writer.removeAttribute(item, linkRange);
+					});
 				}
 			}
-		} );
+		});
 	}
 
 	/**
@@ -307,18 +318,22 @@ export default class LinkCommand extends Command {
 	 * @param decoratorName The name of the manual decorator used in the model
 	 * @returns The information whether a given decorator is currently present in the selection.
 	 */
-	private _getDecoratorStateFromModel( decoratorName: string ): boolean | undefined {
+	private _getDecoratorStateFromModel(
+		decoratorName: string
+	): boolean | undefined {
 		const model = this.editor.model;
 		const selection = model.document.selection;
 		const selectedElement = selection.getSelectedElement();
 
 		// A check for the `LinkImage` plugin. If the selection contains an element, get values from the element.
 		// Currently the selection reads attributes from text nodes only. See #7429 and #7465.
-		if ( isLinkableElement( selectedElement, model.schema ) ) {
-			return selectedElement.getAttribute( decoratorName ) as boolean | undefined;
+		if (isLinkableElement(selectedElement, model.schema)) {
+			return selectedElement.getAttribute(decoratorName) as
+				| boolean
+				| undefined;
 		}
 
-		return selection.getAttribute( decoratorName ) as boolean | undefined;
+		return selection.getAttribute(decoratorName) as boolean | undefined;
 	}
 
 	/**
@@ -327,10 +342,13 @@ export default class LinkCommand extends Command {
 	 * @param range A range to check.
 	 * @param allowedRanges An array of ranges created on elements where the attribute is accepted.
 	 */
-	private _isRangeToUpdate( range: Range, allowedRanges: Array<Range> ): boolean {
-		for ( const allowedRange of allowedRanges ) {
+	private _isRangeToUpdate(
+		range: Range,
+		allowedRanges: Array<Range>
+	): boolean {
+		for (const allowedRange of allowedRanges) {
 			// A range is inside an element that will have the `linkHref` attribute. Do not modify its nodes.
-			if ( allowedRange.containsRange( range ) ) {
+			if (allowedRange.containsRange(range)) {
 				return false;
 			}
 		}
@@ -346,116 +364,37 @@ export default class LinkCommand extends Command {
 	 * @param range A range where should be inserted content.
 	 * @param href A link value which should be in the href attribute and in the content.
 	 */
-	private _updateLinkContent( model: Model, writer: Writer, range: Range, href: string, text?: any, extraAttributes?: any ): Range {
-		extraAttributes = extraAttributes || {};
-		extraAttributes.linkHref = href;
+	private _updateLinkContent(
+		model: Model,
+		writer: Writer,
+		range: Range,
+		href: string
+	): Range {
+		const text = writer.createText(href, { linkHref: href });
 
-		const textElement = writer.createText( text || href, extraAttributes );
-
-		return model.insertContent( textElement, range );
+		return model.insertContent(text, range);
 	}
 }
 
 // Returns a text of a link under the collapsed selection or a selection that contains the entire link.
-function extractTextFromSelection( selection: DocumentSelection ): string | null {
-	if ( selection.isCollapsed ) {
-		const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
+function extractTextFromSelection(selection: DocumentSelection): string | null {
+	if (selection.isCollapsed) {
+		const firstPosition = selection.getFirstPosition();
 
-		if ( linkBlock && linkBlock.childCount > 1 ) {
-			let text = '';
-			const children = getLinkNodes( linkBlock, selection );
-
-			children.forEach( child => {
-				text += child._data;
-			} );
-
-			return text;
-		} else {
-			const firstPosition = selection.getFirstPosition();
-
-			return firstPosition!.textNode && firstPosition!.textNode.data;
-		}
+		return firstPosition!.textNode && firstPosition!.textNode.data;
 	} else {
-		const rangeItems = Array.from( selection.getFirstRange()!.getItems() );
+		const rangeItems = Array.from(selection.getFirstRange()!.getItems());
 
-		if ( rangeItems.length > 1 ) {
+		if (rangeItems.length > 1) {
 			return null;
 		}
 
-		const firstNode = rangeItems[ 0 ];
+		const firstNode = rangeItems[0];
 
-		if ( firstNode.is( '$text' ) || firstNode.is( '$textProxy' ) ) {
+		if (firstNode.is('$text') || firstNode.is('$textProxy')) {
 			return firstNode.data;
 		}
 
 		return null;
 	}
-}
-
-function selectionIsLink( selection: DocumentSelection ): boolean {
-	const linkBlock = Array.from( selection.getSelectedBlocks() )[ 0 ];
-
-	if ( linkBlock && linkBlock.childCount > 1 ) {
-		const linkChildren = getLinkNodes( linkBlock, selection );
-
-		return linkChildren.length > 0;
-	} else {
-		const selectedElementIndex = selection.getFirstPosition()!.index;
-		const children = Array.from( linkBlock.getChildren() );
-		// @ts-ignore
-		return ( children[ selectedElementIndex ] && children[ selectedElementIndex ]._attrs.get( 'linkHref' ) !== undefined ) || false;
-	}
-}
-
-function getLinkNodes( linkBlock: any, selection: DocumentSelection ): Array<any> {
-	const selectedElementIndex = selection.getFirstPosition()!.index;
-	const children = Array.from( linkBlock.getChildren() );
-	let indexBefore = selectedElementIndex - 1;
-	let indexAfter = selectedElementIndex;
-	const linkNodesBeforeSelectedElement = [];
-	const linkNodesAfterSelectedElement = [];
-
-	// @ts-ignore
-	while ( indexBefore >= 0 && children[ indexBefore ]._attrs.get( 'linkHref' ) ) {
-		linkNodesBeforeSelectedElement.push( children[ indexBefore ] );
-		indexBefore--;
-	}
-
-	linkNodesBeforeSelectedElement.reverse();
-
-	// @ts-ignore
-	while ( indexAfter < children.length && children[ indexAfter ]._attrs.get( 'linkHref' ) ) {
-		linkNodesAfterSelectedElement.push( children[ indexAfter ] );
-		indexAfter++;
-	}
-
-	return [ ...linkNodesBeforeSelectedElement, ...linkNodesAfterSelectedElement ];
-}
-
-function getSharedAttributes( children: Array<any> ): any {
-	const sharedAttributes: any = {};
-
-	children.forEach( child => {
-		const attributes = Object.fromEntries( child._attrs );
-
-		for ( const attribute in attributes ) {
-			if ( attribute === 'linkHref' ) {
-				continue;
-			}
-
-			if ( sharedAttributes[ attribute ] === undefined ) {
-				sharedAttributes[ attribute ] = attributes[ attribute ];
-			} else if ( sharedAttributes[ attribute ] !== attributes[ attribute ] ) {
-				sharedAttributes[ attribute ] = null;
-			}
-		}
-
-		for ( const attribute in sharedAttributes ) {
-			if ( attributes[ attribute ] === undefined ) {
-				sharedAttributes[ attribute ] = null;
-			}
-		}
-	} );
-
-	return sharedAttributes;
 }
